@@ -1,3 +1,34 @@
+RPI version for Atari 5200 emulation
+------------------------------------
+
+New parameters in /home/pi/.atari800.cfg :
+
+SDL_JOY_USE_HAT=1 <--- use this if your joystick is hat not axis-based
+SDL_JOY_0_SELECT=8 <-- button ID
+SDL_JOY_0_START=9 <-- button ID
+SDL_JOY_0_TRIGGER1=2 <-- button ID
+SDL_JOY_0_TRIGGER2=1 <-- button ID
+
+See sample.cfg
+
+Use jstest application to get the button IDs for your joystick.
+
+Press SELECT + START to exit emulator
+
+Compiled and tested on RETROPIE 3.6 using a RPI2:
+
+    cd src
+    autoreconf -v
+    ./configure --target=rpi
+    make clean
+    make
+
+Replace atari800 in /opt/retropie/emulators/atari800/bin/ with the new generated executable
+
+Check emulators.cfg for recommended configuration
+
+
+
 Atari800 emulator version 3.1.0
 -------------------------------
 
