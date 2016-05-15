@@ -55,6 +55,14 @@ Replace atari800 in /opt/retropie/emulators/atari800/bin/ with the new generated
 
 Check emulators.cfg for recommended configuration
 
+Compiled version:
+-----------------
+
+cd /opt/retropie/emulators/atari800/bin/
+cp atari800 atari800.original
+sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari800?raw=true -O atari800
+chmod +x atari800
+
 
 
 Atari800 emulator version 3.1.0
