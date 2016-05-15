@@ -59,9 +59,9 @@ Compiled version:
 -----------------
 
 cd /opt/retropie/emulators/atari800/bin/
-cp atari800 atari800.original
+sudo cp atari800 atari800.original
 sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari800?raw=true -O atari800
-chmod +x atari800
+sudo chmod +x atari800
 
 
 
