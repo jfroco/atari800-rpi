@@ -57,9 +57,11 @@
 
 static int grab_mouse = FALSE;
 static int swap_joysticks = FALSE;
-static int USE_HAT = FALSE;
+/* static int USE_HAT = FALSE; */
 static int JOY_0_TRIGGER1 = 2;
 static int JOY_0_TRIGGER2 = 1;
+static int JOY_0_ASTERISK = 3;
+static int JOY_0_HASH= 0;
 static int JOY_0_START = 9;
 static int JOY_0_SELECT = 8;
 
@@ -171,24 +173,32 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		return SDLKeyBind(&KBD_STICK_1_UP, parameters);
 	else if (strcmp(option, "SDL_JOY_1_TRIGGER") == 0)
 		return SDLKeyBind(&KBD_TRIG_1, parameters);
-	else if (strcmp(option, "SDL_JOY_USE_HAT") == 0) {
+	/*else if (strcmp(option, "SDL_JOY_USE_HAT") == 0) {
 		USE_HAT = (parameters != NULL && parameters[0] != '0');
 		return TRUE;
-	}
+	}*/
 	else if (strcmp(option, "SDL_JOY_0_START") == 0) {
-		if (parameters != NULL) JOY_0_START = parameters[0] - '0';
+		if (parameters != NULL) JOY_0_START = atoi(parameters);
 		return TRUE;
 	}
 	else if (strcmp(option, "SDL_JOY_0_SELECT") == 0) {
-		if (parameters != NULL) JOY_0_SELECT = parameters[0] - '0';
+		if (parameters != NULL) JOY_0_SELECT = atoi(parameters);
 		return TRUE;
 	}
 	else if (strcmp(option, "SDL_JOY_0_TRIGGER1") == 0) {
-		if (parameters != NULL) JOY_0_TRIGGER1 = parameters[0] - '0';
+		if (parameters != NULL) JOY_0_TRIGGER1 = atoi(parameters);
 		return TRUE;
 	}
 	else if (strcmp(option, "SDL_JOY_0_TRIGGER2") == 0) {
-		if (parameters != NULL) JOY_0_TRIGGER2 = parameters[0] - '0';
+		if (parameters != NULL) JOY_0_TRIGGER2 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "SDL_JOY_0_ASTERISK") == 0) {
+		if (parameters != NULL) JOY_0_ASTERISK = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "SDL_JOY_0_HASH") == 0) {
+		if (parameters != NULL) JOY_0_HASH = atoi(parameters);
 		return TRUE;
 	}
 	else
@@ -213,11 +223,13 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_1_UP=%d\n", KBD_STICK_1_UP);
 	fprintf(fp, "SDL_JOY_1_DOWN=%d\n", KBD_STICK_1_DOWN);
 	fprintf(fp, "SDL_JOY_1_TRIGGER=%d\n", KBD_TRIG_1);
-	fprintf(fp, "SDL_JOY_USE_HAT=%d\n", USE_HAT);
+	/* fprintf(fp, "SDL_JOY_USE_HAT=%d\n", USE_HAT); */
 	fprintf(fp, "SDL_JOY_0_SELECT=%d\n", JOY_0_SELECT);
 	fprintf(fp, "SDL_JOY_0_START=%d\n", JOY_0_START);
 	fprintf(fp, "SDL_JOY_0_TRIGGER1=%d\n", JOY_0_TRIGGER1);
 	fprintf(fp, "SDL_JOY_0_TRIGGER2=%d\n", JOY_0_TRIGGER2);
+	fprintf(fp, "SDL_JOY_0_ASTERISK=%d\n", JOY_0_ASTERISK);
+	fprintf(fp, "SDL_JOY_0_HASH=%d\n", JOY_0_HASH);
 }
 
 void PLATFORM_SetJoystickKey(int joystick, int direction, int value)
@@ -639,12 +651,31 @@ int PLATFORM_Keyboard(void)
 	if (kbhits[SDLK_F4])
 		INPUT_key_consol &= (~INPUT_CONSOL_START);
 
-	if (Atari800_machine_type == Atari800_MACHINE_5200 && !UI_is_active) {
+	/* ATARI 5200: Special button combinations for SELECT & START & MENU NAVIGATION*/
 		int select = SDL_JoystickGetButton(joystick0,JOY_0_SELECT);
 		int start = SDL_JoystickGetButton(joystick0,JOY_0_START);
 		if (select && start) return AKEY_EXIT;
-		if (start) return AKEY_5200_START;
-	}
+		if (!UI_is_active) {
+			if (start) return AKEY_5200_START;
+			int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
+			if (select && aster) return AKEY_UI;
+			if (aster) return AKEY_5200_ASTERISK;
+			int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
+			if (select && hash) return AKEY_WARMSTART;
+			if (hash) return AKEY_5200_HASH;
+		} else {
+			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
+			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
+			if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
+			if (joystick0 != NULL) {
+				int hat = SDL_JoystickGetHat(joystick0, 0);
+				if (hat == SDL_HAT_UP) return AKEY_UP;
+				if (hat == SDL_HAT_DOWN) return AKEY_DOWN;
+				int y = SDL_JoystickGetAxis(joystick0, 1);
+				if (y < -minjoy) return AKEY_UP;
+				if (y > minjoy) return AKEY_DOWN;
+			}
+		}
 
 
 	if (key_pressed == 0)
@@ -1306,68 +1337,63 @@ void SDL_INPUT_Restart(void)
 	if(grab_mouse) SDL_WM_GrabInput(SDL_GRAB_ON);
 }
 
-static int get_SDL_joystick_state(SDL_Joystick *joystick)
+static int get_SDL_joystick_state(SDL_Joystick *joystick, int delta)
 {
 	int x;
 	int y;
 	int h;
 
-	// printf("Joystick axis num %d hat num %d ", SDL_JoystickNumAxes(joystick), SDL_JoystickNumHats(joystick));
-
-	if (USE_HAT) {
-		h = SDL_JoystickGetHat(joystick, 0);
-		switch(h) {
-			case SDL_HAT_LEFTUP:
-				return INPUT_STICK_UL;
-			case SDL_HAT_RIGHTUP:
-				return INPUT_STICK_UR;
-			case SDL_HAT_UP:
-				return INPUT_STICK_FORWARD;
-			case SDL_HAT_LEFTDOWN:
-				return INPUT_STICK_LL;
-			case SDL_HAT_RIGHTDOWN:
-				return INPUT_STICK_LR;
-			case SDL_HAT_DOWN:
-				return INPUT_STICK_BACK;
-			case SDL_HAT_LEFT:
-				return INPUT_STICK_LEFT;
-			case SDL_HAT_RIGHT:
-				return INPUT_STICK_RIGHT;
-			case SDL_HAT_CENTERED:
-				return INPUT_STICK_CENTRE;
-			default:
-				return INPUT_STICK_CENTRE;
-		}
-	} else {
-		x = SDL_JoystickGetAxis(joystick, 0);
-		y = SDL_JoystickGetAxis(joystick, 1);
-
-		if (x > minjoy) {
-			if (y < -minjoy)
-				return INPUT_STICK_UR;
-			else if (y > minjoy)
-				return INPUT_STICK_LR;
-			else
-				return INPUT_STICK_RIGHT;
-		}
-		else if (x < -minjoy) {
-			if (y < -minjoy)
-				return INPUT_STICK_UL;
-			else if (y > minjoy)
-				return INPUT_STICK_LL;
-			else
-				return INPUT_STICK_LEFT;
-		}
-		else {
-			if (y < -minjoy)
-				return INPUT_STICK_FORWARD;
-			else if (y > minjoy)
-				return INPUT_STICK_BACK;
-			else
-				return INPUT_STICK_CENTRE;
-		}
+if (!delta) {
+	h = SDL_JoystickGetHat(joystick, 0);
+	switch(h) {
+		case SDL_HAT_LEFTUP:
+			return INPUT_STICK_UL;
+		case SDL_HAT_RIGHTUP:
+			return INPUT_STICK_UR;
+		case SDL_HAT_UP:
+			return INPUT_STICK_FORWARD;
+		case SDL_HAT_LEFTDOWN:
+			return INPUT_STICK_LL;
+		case SDL_HAT_RIGHTDOWN:
+			return INPUT_STICK_LR;
+		case SDL_HAT_DOWN:
+			return INPUT_STICK_BACK;
+		case SDL_HAT_LEFT:
+			return INPUT_STICK_LEFT;
+		case SDL_HAT_RIGHT:
+			return INPUT_STICK_RIGHT;
+		/* case SDL_HAT_CENTERED:
+			return INPUT_STICK_CENTRE; */
 	}
+}
 
+	x = SDL_JoystickGetAxis(joystick, 0 + delta);
+	y = SDL_JoystickGetAxis(joystick, 1 + delta);
+
+	if (x > minjoy) {
+		if (y < -minjoy)
+			return INPUT_STICK_UR;
+		else if (y > minjoy)
+			return INPUT_STICK_LR;
+		else
+			return INPUT_STICK_RIGHT;
+	}
+	else if (x < -minjoy) {
+		if (y < -minjoy)
+			return INPUT_STICK_UL;
+		else if (y > minjoy)
+			return INPUT_STICK_LL;
+		else
+			return INPUT_STICK_LEFT;
+	}
+	else {
+		if (y < -minjoy)
+			return INPUT_STICK_FORWARD;
+		else if (y > minjoy)
+			return INPUT_STICK_BACK;
+		else
+			return INPUT_STICK_CENTRE;
+	}
 
 }
 
@@ -1433,22 +1459,23 @@ static void update_SDL_joysticks(void)
 	SDL_JoystickUpdate();
 
 	if (joystick0 != NULL) {
-		sdl_js_state[0].port = get_SDL_joystick_state(joystick0);
+		sdl_js_state[0].port = get_SDL_joystick_state(joystick0, 0);
 
 		sdl_js_state[0].trig = 0;
-		// for (i = 0; i < joystick0_nbuttons; i++) {
-		// 	if (SDL_JoystickGetButton(joystick0, i)) {
-		// 		sdl_js_state[0].trig |= 1 << i;
-		// 	}
-		// }
+		/* for (i = 0; i < joystick0_nbuttons; i++) {
+		 	if (SDL_JoystickGetButton(joystick0, i)) {
+		 		sdl_js_state[0].trig |= 1 << i;
+		 	}
+		 } */
 		if (SDL_JoystickGetButton(joystick0, JOY_0_TRIGGER1))
 			sdl_js_state[0].trig = 1;
 		if (SDL_JoystickGetButton(joystick0, JOY_0_TRIGGER2))
 			INPUT_key_shift = 1;
+
 	}
 
 	if (joystick1 != NULL) {
-		sdl_js_state[1].port = get_SDL_joystick_state(joystick1);
+		sdl_js_state[1].port = get_SDL_joystick_state(joystick1, 0);
 
 		sdl_js_state[1].trig = 0;
 		for (i = 0; i < joystick1_nbuttons; i++) {
@@ -1457,6 +1484,13 @@ static void update_SDL_joysticks(void)
 			}
 		}
 	}
+
+	/* Use second analog control in joystick0 as sencond player stick for ROBOTRON-like games*/
+	if (joystick0 != NULL && sdl_js_state[1].port == INPUT_STICK_CENTRE) 
+		sdl_js_state[1].port = get_SDL_joystick_state(joystick0, 2);
+
+
+
 }
 
 static void get_platform_PORT(Uint8 *s0, Uint8 *s1)

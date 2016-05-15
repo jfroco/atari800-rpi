@@ -1,19 +1,47 @@
 RPI version for Atari 5200 emulation
 ------------------------------------
 
+This is a port of Atari800 with focus on emulating Atarin 5200 that adds:
+
+- Full Joystick support for RetroPie
+- Menu navigation using joystick
+- Joystick Button configuration: trigger1, trigger 2 (Moon Patrol and H.E.R.O.!), asterisk and hash. 
+- Supports hat and axis for joysticks
+- Use second analog stick in first as second player stick: Robotron and Space Dungeon!!!
+
+(Only player1)
+
+Hotkeys:
+--------
+
+SELECT + START to exit emulator
+SELECT + * (X): Emulator Menu
+SELECT + # (Y): Reset
+
+Use joystick to navigate the emulator MENU plus Trigger 1 (A) to accept and Trigger 2 (B) to go back.
+
+Hint: If the emulator asks for Cart type select one of these using joystick + trigger 1:
+
+- Two chip 16 KB 5200 cartridge <- for 16KB roms (games)
+- Standard 32 KB 5200 cartridge <- for 32KB roms (games)
+- Bounty Bob 40 KB 5200 cartridge <- for the great Bounty Bob strikes back! game
+
+
+Installation:
+-------------
+
 New parameters in /home/pi/.atari800.cfg :
 
-SDL_JOY_USE_HAT=1 <--- use this if your joystick is hat not axis-based
 SDL_JOY_0_SELECT=8 <-- button ID
 SDL_JOY_0_START=9 <-- button ID
-SDL_JOY_0_TRIGGER1=2 <-- button ID
-SDL_JOY_0_TRIGGER2=1 <-- button ID
+SDL_JOY_0_TRIGGER1=1 <-- button ID
+SDL_JOY_0_TRIGGER2=2 <-- button ID
+SDL_JOY_0_ASTERISK=0 <-- button ID
+SDL_JOY_0_HASH=3 <-- button ID
 
 See sample.cfg
 
 Use jstest application to get the button IDs for your joystick.
-
-Press SELECT + START to exit emulator
 
 Compiled and tested on RETROPIE 3.6 using a RPI2:
 
