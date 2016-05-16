@@ -64,6 +64,8 @@ static int JOY_0_ASTERISK = 3;
 static int JOY_0_HASH= 0;
 static int JOY_0_START = 9;
 static int JOY_0_SELECT = 8;
+static int JOY_0_INDEX=0;
+static int JOY_1_INDEX=1;
 
 /* joystick emulation
    keys are loaded from config file
@@ -201,6 +203,14 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		if (parameters != NULL) JOY_0_HASH = atoi(parameters);
 		return TRUE;
 	}
+        else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
+		if (parameters != NULL) JOY_0_INDEX = atoi(parameters);
+		return TRUE;
+	}
+        else if (strcmp(option, "SDL_JOY_1_INDEX") == 0) {
+		if (parameters != NULL) JOY_1_INDEX = atoi(parameters);
+		return TRUE;
+	}
 	else
 		return FALSE;
 }
@@ -230,6 +240,8 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_TRIGGER2=%d\n", JOY_0_TRIGGER2);
 	fprintf(fp, "SDL_JOY_0_ASTERISK=%d\n", JOY_0_ASTERISK);
 	fprintf(fp, "SDL_JOY_0_HASH=%d\n", JOY_0_HASH);
+        fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
+        fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 }
 
 void PLATFORM_SetJoystickKey(int joystick, int direction, int value)
@@ -1206,7 +1218,7 @@ void SDL_INPUT_Mouse(void)
 static void Init_SDL_Joysticks(int first, int second)
 {
 	if (first) {
-		joystick0 = SDL_JoystickOpen(0);
+		joystick0 = SDL_JoystickOpen(JOY_0_INDEX);
 		if (joystick0 == NULL)
 			Log_print("joystick 0 not found");
 		else {
@@ -1220,7 +1232,7 @@ static void Init_SDL_Joysticks(int first, int second)
 	}
 
 	if (second) {
-		joystick1 = SDL_JoystickOpen(1);
+		joystick1 = SDL_JoystickOpen(JOY_1_INDEX);
 		if (joystick1 == NULL)
 			Log_print("joystick 1 not found");
 		else {
