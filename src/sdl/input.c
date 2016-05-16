@@ -64,6 +64,7 @@ static int JOY_0_ASTERISK = 3;
 static int JOY_0_HASH= 0;
 static int JOY_0_START = 9;
 static int JOY_0_SELECT = 8;
+static int JOY_0_SECOND_AXIS = 2;
 static int JOY_0_INDEX=0;
 static int JOY_1_INDEX=1;
 
@@ -203,11 +204,15 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		if (parameters != NULL) JOY_0_HASH = atoi(parameters);
 		return TRUE;
 	}
-        else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_SECOND_AXIS") == 0) {
+		if (parameters != NULL) JOY_0_SECOND_AXIS = atoi(parameters);
+		return TRUE;
+	}
+    else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
 		if (parameters != NULL) JOY_0_INDEX = atoi(parameters);
 		return TRUE;
 	}
-        else if (strcmp(option, "SDL_JOY_1_INDEX") == 0) {
+    else if (strcmp(option, "SDL_JOY_1_INDEX") == 0) {
 		if (parameters != NULL) JOY_1_INDEX = atoi(parameters);
 		return TRUE;
 	}
@@ -240,8 +245,9 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_TRIGGER2=%d\n", JOY_0_TRIGGER2);
 	fprintf(fp, "SDL_JOY_0_ASTERISK=%d\n", JOY_0_ASTERISK);
 	fprintf(fp, "SDL_JOY_0_HASH=%d\n", JOY_0_HASH);
-        fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
-        fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
+	fprintf(fp, "SDL_JOY_0_SECOND_AXIS=%d\n", JOY_0_SECOND_AXIS);
+    fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
+    fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 }
 
 void PLATFORM_SetJoystickKey(int joystick, int direction, int value)
@@ -1498,9 +1504,8 @@ static void update_SDL_joysticks(void)
 	}
 
 	/* Use second analog control in joystick0 as sencond player stick for ROBOTRON-like games*/
-	if (joystick0 != NULL && sdl_js_state[1].port == INPUT_STICK_CENTRE) 
-		sdl_js_state[1].port = get_SDL_joystick_state(joystick0, 2);
-
+	if ((joystick0 != NULL)  && ( joystick1 == NULL || sdl_js_state[1].port == INPUT_STICK_CENTRE))
+		sdl_js_state[1].port = get_SDL_joystick_state(joystick0, JOY_0_SECOND_AXIS);
 
 
 }

@@ -4,10 +4,12 @@ RPI version for Atari 5200 emulation
 This is a port of Atari800 with focus on emulating Atarin 5200 that adds:
 
 - Full Joystick support for RetroPie
+- Autoconfiguration of buttons using Retroarch configuration
 - Menu navigation using joystick
 - Joystick Button configuration: trigger1, trigger 2 (Moon Patrol and H.E.R.O.!), asterisk and hash. 
 - Supports hat and axis for joysticks
-- Use second analog stick in first as second player stick: Robotron and Space Dungeon!!!
+- Use second analog stick in first as second player stick: Robotron and Space Dungeon!!! (configurable axis)
+- Ability to define joysticks numbers
 
 (Only player1)
 
@@ -38,10 +40,13 @@ SDL_JOY_0_TRIGGER1=1 <-- button ID
 SDL_JOY_0_TRIGGER2=2 <-- button ID
 SDL_JOY_0_ASTERISK=0 <-- button ID
 SDL_JOY_0_HASH=3 <-- button ID
+SDL_JOY_0_SECOND_AXIS=2 <-- axis ID
+SDL_JOY_0_INDEX=0 <-- index of P1 joystick
+SDL_JOY_1_INDEX=1 <-- index of P2 joystick
 
 See sample.cfg
 
-Use jstest application to get the button IDs for your joystick.
+Use jstest application to get the axis and button IDs for your joystick.
 
 Compiled and tested on RETROPIE 3.6 using a RPI2:
 
@@ -58,11 +63,28 @@ Check emulators.cfg for recommended configuration
 Compiled version:
 -----------------
 
-cd /opt/retropie/emulators/atari800/bin/
-sudo cp atari800 atari800.original
-sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari800?raw=true -O atari800
-sudo chmod +x atari800
+    cd /opt/retropie/emulators/atari800/bin/
+    sudo cp atari800 atari800.original
+    sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari800?raw=true -O atari800
+    sudo chmod +x atari800
 
+Autoconfiguration
+-----------------
+
+You can auto-configure the first joystick to use the current joystick in EmulationStation/Retroarch:
+
+    cd /opt/retropie/emulators/atari800/bin/
+    sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari5200.py?raw=true -O atari5200.py
+    sudo chmod +x atari5200.py
+
+Now edit your /opt/retropie/configs/atari5200/emulators.cfg, it should look like this:
+
+atari800="/opt/retropie/emulators/atari800/bin/atari5200.py; /opt/retropie/emulators/atari800/bin/atari800 -5200 -cart-type 4 -cart %ROM%"
+default="atari800"
+
+Now everytime you start a game, the atari5200.py script will configure the atari800 emulator joystick for you, respecting current EmulationStation button configuration.
+
+See emulator.cfg
 
 
 Atari800 emulator version 3.1.0
