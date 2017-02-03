@@ -40,6 +40,7 @@ SDL_JOY_0_TRIGGER1=1 <-- button ID
 SDL_JOY_0_TRIGGER2=2 <-- button ID
 SDL_JOY_0_ASTERISK=0 <-- button ID
 SDL_JOY_0_HASH=3 <-- button ID
+SDL_JOY_0_OPTION=4 <-- button ID
 SDL_JOY_0_SECOND_AXIS=2 <-- axis ID
 SDL_JOY_0_INDEX=0 <-- index of P1 joystick
 SDL_JOY_1_INDEX=1 <-- index of P2 joystick
