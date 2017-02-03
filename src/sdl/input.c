@@ -64,6 +64,7 @@ static int JOY_0_ASTERISK = 3;
 static int JOY_0_HASH= 0;
 static int JOY_0_START = 9;
 static int JOY_0_SELECT = 8;
+static int JOY_0_OPTION = 4;
 static int JOY_0_SECOND_AXIS = 2;
 static int JOY_0_INDEX=0;
 static int JOY_1_INDEX=1;
@@ -204,6 +205,10 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		if (parameters != NULL) JOY_0_HASH = atoi(parameters);
 		return TRUE;
 	}
+			else if (strcmp(option, "SDL_JOY_0_OPTION") == 0) {
+		if (parameters != NULL) JOY_0_OPTION = atoi(parameters);
+		return TRUE;
+	}
 	else if (strcmp(option, "SDL_JOY_0_SECOND_AXIS") == 0) {
 		if (parameters != NULL) JOY_0_SECOND_AXIS = atoi(parameters);
 		return TRUE;
@@ -244,6 +249,7 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_TRIGGER1=%d\n", JOY_0_TRIGGER1);
 	fprintf(fp, "SDL_JOY_0_TRIGGER2=%d\n", JOY_0_TRIGGER2);
 	fprintf(fp, "SDL_JOY_0_ASTERISK=%d\n", JOY_0_ASTERISK);
+	fprintf(fp, "SDL_JOY_0_OPTION=%d\n", JOY_0_OPTION);
 	fprintf(fp, "SDL_JOY_0_HASH=%d\n", JOY_0_HASH);
 	fprintf(fp, "SDL_JOY_0_SECOND_AXIS=%d\n", JOY_0_SECOND_AXIS);
     fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
@@ -673,7 +679,7 @@ int PLATFORM_Keyboard(void)
 		int select = SDL_JoystickGetButton(joystick0,JOY_0_SELECT);
 		int start = SDL_JoystickGetButton(joystick0,JOY_0_START);
 		if (select && start) return AKEY_EXIT;
-		if (!UI_is_active) {
+		if (Atari800_machine_type == Atari800_MACHINE_5200 && !UI_is_active) {
 			if (start) return AKEY_5200_START;
 			int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
 			if (select && aster) return AKEY_UI;
@@ -681,7 +687,30 @@ int PLATFORM_Keyboard(void)
 			int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
 			if (select && hash) return AKEY_WARMSTART;
 			if (hash) return AKEY_5200_HASH;
-		} else {
+		} 
+    /* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
+		if (!UI_is_active) {
+			if (start) {
+				INPUT_key_consol &= (~INPUT_CONSOL_START);
+				return AKEY_START;
+			}
+			int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
+			if (select && aster) return AKEY_UI;
+			if (select) {
+				INPUT_key_consol &= (~INPUT_CONSOL_SELECT); 
+				return AKEY_SELECT;
+			}
+			if (aster) return AKEY_ASTERISK;
+			int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
+			if (select && hash) return AKEY_WARMSTART;
+			if (hash) return AKEY_UI;
+			if (SDL_JoystickGetButton(joystick0,JOY_0_OPTION)) {
+				INPUT_key_consol &= (~INPUT_CONSOL_OPTION);
+				return AKEY_OPTION; 
+			}
+			    
+		}
+		else {
 			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
 			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
 			if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
