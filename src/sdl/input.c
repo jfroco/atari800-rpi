@@ -1532,7 +1532,7 @@ static void update_SDL_joysticks(void)
 		}
 	}
 
-	/* Use second analog control in joystick0 as sencond player stick for ROBOTRON-like games*/
+	/* Use second analog control in joystick0 as second player stick for ROBOTRON-like games*/
 	if ((joystick0 != NULL)  && ( joystick1 == NULL || sdl_js_state[1].port == INPUT_STICK_CENTRE))
 		sdl_js_state[1].port = get_SDL_joystick_state(joystick0, JOY_0_SECOND_AXIS);
 
@@ -1582,6 +1582,9 @@ static void get_platform_PORT(Uint8 *s0, Uint8 *s1)
 	if (fd_joystick1 != -1)
 		*s1 &= get_LPT_joystick_state(fd_joystick1);
 	else if (joystick1 != NULL)
+		*s1 &= sdl_js_state[1].port;
+	/* do not discard joystick0 2nd axis data when joystick 1 is not connected */
+	else if (joystick1 == NULL && sdl_js_state[1].port != NULL)
 		*s1 &= sdl_js_state[1].port;
 }
 
