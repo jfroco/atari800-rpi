@@ -66,6 +66,10 @@ static int JOY_0_START = 9;
 static int JOY_0_SELECT = 8;
 static int JOY_0_OPTION = 4;
 static int JOY_0_SECOND_AXIS = 2;
+static int JOY_0_SECOND_AXIS_ENABLED = FALSE;
+static int JOY_0_DIGIT_1 = 0;
+static int JOY_0_DIGIT_2 = 6;
+static int JOY_0_DIGIT_3 = 7;
 static int JOY_0_INDEX=0;
 static int JOY_1_INDEX=1;
 
@@ -205,7 +209,7 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		if (parameters != NULL) JOY_0_HASH = atoi(parameters);
 		return TRUE;
 	}
-			else if (strcmp(option, "SDL_JOY_0_OPTION") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_OPTION") == 0) {
 		if (parameters != NULL) JOY_0_OPTION = atoi(parameters);
 		return TRUE;
 	}
@@ -213,11 +217,27 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		if (parameters != NULL) JOY_0_SECOND_AXIS = atoi(parameters);
 		return TRUE;
 	}
-    else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_SECOND_AXIS_ENABLED") == 0) {
+		JOY_0_SECOND_AXIS_ENABLED = (parameters != NULL && parameters[0] != '0');
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_1") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_1 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_2") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_2 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_3") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_3 = atoi(parameters);
+		return TRUE;
+	}	
+	else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
 		if (parameters != NULL) JOY_0_INDEX = atoi(parameters);
 		return TRUE;
 	}
-    else if (strcmp(option, "SDL_JOY_1_INDEX") == 0) {
+	else if (strcmp(option, "SDL_JOY_1_INDEX") == 0) {
 		if (parameters != NULL) JOY_1_INDEX = atoi(parameters);
 		return TRUE;
 	}
@@ -252,8 +272,12 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_OPTION=%d\n", JOY_0_OPTION);
 	fprintf(fp, "SDL_JOY_0_HASH=%d\n", JOY_0_HASH);
 	fprintf(fp, "SDL_JOY_0_SECOND_AXIS=%d\n", JOY_0_SECOND_AXIS);
-    fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
-    fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
+	fprintf(fp, "SDL_JOY_0_SECOND_AXIS_ENABLED=%d\n", JOY_0_SECOND_AXIS_ENABLED);	
+	fprintf(fp, "SDL_JOY_0_DIGIT_1=%d\n", JOY_0_DIGIT_1);
+	fprintf(fp, "SDL_JOY_0_DIGIT_2=%d\n", JOY_0_DIGIT_2);
+	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_3);
+	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
+	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 }
 
 void PLATFORM_SetJoystickKey(int joystick, int direction, int value)
@@ -724,7 +748,10 @@ int PLATFORM_Keyboard(void)
 			}
 		}
 
-
+	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_1;
+	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_2;
+	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_3;
+	
 	if (key_pressed == 0)
 		return AKEY_NONE;
 
@@ -1523,7 +1550,7 @@ static void update_SDL_joysticks(void)
 
 	if (joystick1 != NULL) {
 		sdl_js_state[1].port = get_SDL_joystick_state(joystick1, 0);
-
+		if (SDL_JoystickGetButton(joystick1,JOY_0_TRIGGER1)) JOY_0_SECOND_AXIS_ENABLED = FALSE;
 		sdl_js_state[1].trig = 0;
 		for (i = 0; i < joystick1_nbuttons; i++) {
 			if (SDL_JoystickGetButton(joystick1, i)) {
@@ -1533,7 +1560,7 @@ static void update_SDL_joysticks(void)
 	}
 
 	/* Use second analog control in joystick0 as second player stick for ROBOTRON-like games*/
-	if ((joystick0 != NULL)  && ( joystick1 == NULL || sdl_js_state[1].port == INPUT_STICK_CENTRE))
+	if ((joystick0 != NULL && JOY_0_SECOND_AXIS_ENABLED == TRUE) && (joystick1 == NULL || sdl_js_state[1].port == INPUT_STICK_CENTRE))
 		sdl_js_state[1].port = get_SDL_joystick_state(joystick0, JOY_0_SECOND_AXIS);
 
 
@@ -1581,11 +1608,8 @@ static void get_platform_PORT(Uint8 *s0, Uint8 *s1)
 
 	if (fd_joystick1 != -1)
 		*s1 &= get_LPT_joystick_state(fd_joystick1);
-	else if (joystick1 != NULL)
-		*s1 &= sdl_js_state[1].port;
-	/* do not discard joystick0 2nd axis data when joystick 1 is not connected */
-	else if (joystick1 == NULL && sdl_js_state[1].port != NULL)
-		*s1 &= sdl_js_state[1].port;
+	/* keep axis data even when joystick 1 is not connected for joystick0 2nd axis*/
+	else 	*s1 &= sdl_js_state[1].port;
 }
 
 static void get_platform_TRIG(Uint8 *t0, Uint8 *t1)
