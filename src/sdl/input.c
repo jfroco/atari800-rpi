@@ -725,21 +725,24 @@ int PLATFORM_Keyboard(void)
 		}
 		if (aster) return AKEY_ASTERISK;
 		if (hash) return AKEY_HASH;
-		if (option) return AKEY_OPTION; 
+		if (option) {
+			INPUT_key_consol &= (~INPUT_CONSOL_OPTION);			
+			return AKEY_OPTION;
+		}	
+	}
+	else {
+		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
+		if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
+		if (joystick0 != NULL) {
+			int hat = SDL_JoystickGetHat(joystick0, 0);
+			if (hat == SDL_HAT_UP) return AKEY_UP;
+			if (hat == SDL_HAT_DOWN) return AKEY_DOWN;
+			int y = SDL_JoystickGetAxis(joystick0, 1);
+			if (y < -minjoy) return AKEY_UP;
+			if (y > minjoy) return AKEY_DOWN;
 		}
-		else {
-			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
-			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
-			if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
-			if (joystick0 != NULL) {
-				int hat = SDL_JoystickGetHat(joystick0, 0);
-				if (hat == SDL_HAT_UP) return AKEY_UP;
-				if (hat == SDL_HAT_DOWN) return AKEY_DOWN;
-				int y = SDL_JoystickGetAxis(joystick0, 1);
-				if (y < -minjoy) return AKEY_UP;
-				if (y > minjoy) return AKEY_DOWN;
-			}
-		}
+	}
 
 	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_1;
 	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_2;
