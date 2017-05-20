@@ -689,7 +689,6 @@ int PLATFORM_Keyboard(void)
 		Log_print("E:%x S:%x C:%x K:%x U:%x M:%x",event.type,INPUT_key_shift,key_control,lastkey,event.key.keysym.unicode,event.key.keysym.mod);
 	}
 	*/
-
 	/* OPTION / SELECT / START keys */
 	INPUT_key_consol = INPUT_CONSOL_NONE;
 	if (kbhits[SDLK_F2])
@@ -698,41 +697,35 @@ int PLATFORM_Keyboard(void)
 		INPUT_key_consol &= (~INPUT_CONSOL_SELECT);
 	if (kbhits[SDLK_F4])
 		INPUT_key_consol &= (~INPUT_CONSOL_START);
-
 	/* ATARI 5200: Special button combinations for SELECT & START & MENU NAVIGATION*/
-		int select = SDL_JoystickGetButton(joystick0,JOY_0_SELECT);
-		int start = SDL_JoystickGetButton(joystick0,JOY_0_START);
-		if (select && start) return AKEY_EXIT;
-		if (Atari800_machine_type == Atari800_MACHINE_5200 && !UI_is_active) {
-			if (start) return AKEY_5200_START;
-			int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
-			if (select && aster) return AKEY_UI;
-			if (aster) return AKEY_5200_ASTERISK;
-			int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
-			if (select && hash) return AKEY_WARMSTART;
-			if (hash) return AKEY_5200_HASH;
-		} 
-    /* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
-		if (!UI_is_active) {
-			if (start) {
-				INPUT_key_consol &= (~INPUT_CONSOL_START);
-				return AKEY_START;
-			}
-			int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
-			if (select && aster) return AKEY_UI;
-			if (select) {
-				INPUT_key_consol &= (~INPUT_CONSOL_SELECT); 
-				return AKEY_SELECT;
-			}
-			if (aster) return AKEY_ASTERISK;
-			int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
-			if (select && hash) return AKEY_WARMSTART;
-			if (hash) return AKEY_UI;
-			if (SDL_JoystickGetButton(joystick0,JOY_0_OPTION)) {
-				INPUT_key_consol &= (~INPUT_CONSOL_OPTION);
-				return AKEY_OPTION; 
-			}
-			    
+	int select = SDL_JoystickGetButton(joystick0,JOY_0_SELECT);
+	int start = SDL_JoystickGetButton(joystick0,JOY_0_START);
+	int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
+	int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
+	int option = SDL_JoystickGetButton(joystick0,JOY_0_OPTION);
+	if (select && start) return AKEY_EXIT;
+	if (Atari800_machine_type == Atari800_MACHINE_5200 && !UI_is_active) {
+		if (select && aster) return AKEY_UI;
+		if (select && hash) return AKEY_WARMSTART;
+		if (start) return AKEY_5200_START;
+		if (aster) return AKEY_5200_ASTERISK;
+		if (hash) return AKEY_5200_HASH;
+	} 
+    	/* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
+	if (!UI_is_active) {
+		if (select && aster) return AKEY_UI;
+		if (select && hash) return AKEY_WARMSTART;
+		if (start) {
+			INPUT_key_consol &= (~INPUT_CONSOL_START);
+			return AKEY_START;
+		}
+		if (select) {
+			INPUT_key_consol &= (~INPUT_CONSOL_SELECT); 
+			return AKEY_SELECT;
+		}
+		if (aster) return AKEY_ASTERISK;
+		if (hash) return AKEY_HASH;
+		if (option) return AKEY_OPTION; 
 		}
 		else {
 			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
