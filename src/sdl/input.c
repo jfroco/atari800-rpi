@@ -70,6 +70,8 @@ static int JOY_0_SECOND_AXIS_ENABLED = FALSE;
 static int JOY_0_DIGIT_1 = 0;
 static int JOY_0_DIGIT_2 = 6;
 static int JOY_0_DIGIT_3 = 7;
+static int JOY_0_DIGIT_4 = 10;
+static int JOY_0_DIGIT_5 = 11;
 static int JOY_0_INDEX=0;
 static int JOY_1_INDEX=1;
 
@@ -232,6 +234,14 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 	else if (strcmp(option, "JOY_0_DIGIT_3") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_3 = atoi(parameters);
 		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_4") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_4 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_5") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_5 = atoi(parameters);
+		return TRUE;
 	}	
 	else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
 		if (parameters != NULL) JOY_0_INDEX = atoi(parameters);
@@ -272,10 +282,12 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_OPTION=%d\n", JOY_0_OPTION);
 	fprintf(fp, "SDL_JOY_0_HASH=%d\n", JOY_0_HASH);
 	fprintf(fp, "SDL_JOY_0_SECOND_AXIS=%d\n", JOY_0_SECOND_AXIS);
-	fprintf(fp, "SDL_JOY_0_SECOND_AXIS_ENABLED=%d\n", JOY_0_SECOND_AXIS_ENABLED);	
+	fprintf(fp, "SDL_JOY_0_SECOND_AXIS_ENABLED=%d\n", JOY_0_SECOND_AXIS_ENABLED);
 	fprintf(fp, "SDL_JOY_0_DIGIT_1=%d\n", JOY_0_DIGIT_1);
 	fprintf(fp, "SDL_JOY_0_DIGIT_2=%d\n", JOY_0_DIGIT_2);
 	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_3);
+	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_4);
+	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_5);
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 }
@@ -712,7 +724,9 @@ int PLATFORM_Keyboard(void)
 		if (hash) return AKEY_5200_HASH;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_5200_1;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_5200_2;
-		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_5200_3;		
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_5200_3;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_4)) return AKEY_5200_4;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_5)) return AKEY_5200_5;
 	} 
     	/* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
 	if (!UI_is_active) {
@@ -735,6 +749,8 @@ int PLATFORM_Keyboard(void)
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_1;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_2;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_3;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_4)) return AKEY_4;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_5)) return AKEY_5;
 	}
 	else {
 		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
