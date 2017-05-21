@@ -50,8 +50,8 @@ SDL_JOY_0_SECOND_AXIS_ENABLED=1     <-- set this to 0 or 1
 SDL_JOY_0_DIGIT_1=0                 <-- button ID
 SDL_JOY_0_DIGIT_2=6                 <-- button ID
 SDL_JOY_0_DIGIT_3=7                 <-- button ID
-SDL_JOY_0_DIGIT_4=10                 <-- button ID
-SDL_JOY_0_DIGIT_5=11                 <-- button ID
+SDL_JOY_0_DIGIT_4=10                <-- button ID
+SDL_JOY_0_DIGIT_5=11                <-- button ID
 
 See sample.cfg
 
