@@ -286,8 +286,8 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_DIGIT_1=%d\n", JOY_0_DIGIT_1);
 	fprintf(fp, "SDL_JOY_0_DIGIT_2=%d\n", JOY_0_DIGIT_2);
 	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_3);
-	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_4);
-	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_5);
+	fprintf(fp, "SDL_JOY_0_DIGIT_4=%d\n", JOY_0_DIGIT_4);
+	fprintf(fp, "SDL_JOY_0_DIGIT_5=%d\n", JOY_0_DIGIT_5);
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 }
