@@ -710,6 +710,9 @@ int PLATFORM_Keyboard(void)
 		if (start) return AKEY_5200_START;
 		if (aster) return AKEY_5200_ASTERISK;
 		if (hash) return AKEY_5200_HASH;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_5200_1;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_5200_2;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_5200_3;		
 	} 
     	/* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
 	if (!UI_is_active) {
@@ -726,9 +729,12 @@ int PLATFORM_Keyboard(void)
 		if (aster) return AKEY_ASTERISK;
 		if (hash) return AKEY_HASH;
 		if (option) {
-			INPUT_key_consol &= (~INPUT_CONSOL_OPTION);			
+			INPUT_key_consol &= (~INPUT_CONSOL_OPTION);
 			return AKEY_OPTION;
-		}	
+		}
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_1;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_2;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_3;
 	}
 	else {
 		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
@@ -743,11 +749,6 @@ int PLATFORM_Keyboard(void)
 			if (y > minjoy) return AKEY_DOWN;
 		}
 	}
-
-	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_1)) return AKEY_1;
-	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_2)) return AKEY_2;
-	if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_3;
-	
 	if (key_pressed == 0)
 		return AKEY_NONE;
 
