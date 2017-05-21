@@ -1,15 +1,18 @@
-RPI version for Atari 5200 emulation
+RPI version for Atari 800/5200 emulation
 ------------------------------------
 
-This is a port of Atari800 with focus on emulating Atarin 5200 that adds:
+This is a port of Atari800 with that adds:
 
 - Full Joystick support for RetroPie
 - Autoconfiguration of buttons using Retroarch configuration
 - Menu navigation using joystick
 - Joystick Button configuration: trigger1, trigger 2 (Moon Patrol and H.E.R.O.!), asterisk and hash. 
 - Supports hat and axis for joysticks
-- Use second analog stick in first as second player stick: Robotron and Space Dungeon!!! (configurable axis)
-- Ability to define joysticks numbers
+- Use second analog stick in first as second player stick: Robotron and Space Dungeon!!! (configurable axis),
+  This is disabled until restart when player 2 joystick trigger 1 is pressed to prevent cheating in two player games.
+- Ability to define joysticks numbers.
+- Numerical 1-3 keys mapped to joystick buttons for games like Beamrider and Congo Bongo.
+- Option key mapped to joystick button for games like Mr. Robot and his Robot Factory.
 
 (Only player1)
 
@@ -17,8 +20,9 @@ Hotkeys:
 --------
 
 SELECT + START to exit emulator
-SELECT + * (X): Emulator Menu
-SELECT + # (Y): Reset
+SELECT + * : Emulator Menu
+SELECT + # : Reset
+
 
 Use joystick to navigate the emulator MENU plus Trigger 1 (A) to accept and Trigger 2 (B) to go back.
 
@@ -34,22 +38,24 @@ Installation:
 
 New parameters in /home/pi/.atari800.cfg :
 
-SDL_JOY_0_SELECT=8 <-- button ID
-SDL_JOY_0_START=9 <-- button ID
-SDL_JOY_0_TRIGGER1=1 <-- button ID
-SDL_JOY_0_TRIGGER2=2 <-- button ID
-SDL_JOY_0_ASTERISK=0 <-- button ID
-SDL_JOY_0_HASH=3 <-- button ID
-SDL_JOY_0_OPTION=4 <-- button ID
-SDL_JOY_0_SECOND_AXIS=2 <-- axis ID
-SDL_JOY_0_INDEX=0 <-- index of P1 joystick
-SDL_JOY_1_INDEX=1 <-- index of P2 joystick
+SDL_JOY_0_SELECT=8                  <-- button ID
+SDL_JOY_0_START=9                   <-- button ID
+SDL_JOY_0_TRIGGER1=1                <-- button ID
+SDL_JOY_0_TRIGGER2=2                <-- button ID
+SDL_JOY_0_ASTERISK=3                <-- button ID
+SDL_JOY_0_OPTION=5                  <-- button ID
+SDL_JOY_0_HASH=4                    <-- button ID
+SDL_JOY_0_SECOND_AXIS=2             <-- axis ID
+SDL_JOY_0_SECOND_AXIS_ENABLED=1     <-- set this to 0 or 1
+SDL_JOY_0_DIGIT_1=0                 <-- button ID
+SDL_JOY_0_DIGIT_2=6                 <-- button ID
+SDL_JOY_0_DIGIT_3=7                 <-- button ID
 
 See sample.cfg
 
 Use jstest application to get the axis and button IDs for your joystick.
 
-Compiled and tested on RETROPIE 3.6 using a RPI2:
+Compiled and tested on RETROPIE 3.6 using a RPI3:
 
     cd src
     autoreconf -v
