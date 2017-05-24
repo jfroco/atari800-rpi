@@ -72,8 +72,9 @@ static int JOY_0_DIGIT_2 = 6;
 static int JOY_0_DIGIT_3 = 7;
 static int JOY_0_DIGIT_4 = 10;
 static int JOY_0_DIGIT_5 = 11;
-static int JOY_0_INDEX=0;
-static int JOY_1_INDEX=1;
+static int JOY_0_INDEX = 0;
+static int JOY_1_INDEX = 1;
+static int JOY_SPEED_ADJUST = 10;
 
 /* joystick emulation
    keys are loaded from config file
@@ -251,6 +252,10 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		if (parameters != NULL) JOY_1_INDEX = atoi(parameters);
 		return TRUE;
 	}
+	else if (strcmp(option, "JOY_SPEED_ADJUST") == 0) {
+		if (parameters != NULL) JOY_SPEED_ADJUST = atoi(parameters);
+		return TRUE;
+	}	
 	else
 		return FALSE;
 }
@@ -290,6 +295,7 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_DIGIT_5=%d\n", JOY_0_DIGIT_5);
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
+	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
 }
 
 void PLATFORM_SetJoystickKey(int joystick, int direction, int value)
@@ -1623,6 +1629,46 @@ static void get_platform_PORT(Uint8 *s0, Uint8 *s1)
 		*s1 &= get_LPT_joystick_state(fd_joystick1);
 	/* keep axis data even when joystick 1 is not connected for joystick0 2nd axis*/
 	else 	*s1 &= sdl_js_state[1].port;
+	if (JOY_SPEED_ADJUST == 9) {
+		INPUT_joy_5200_min = 110;
+		INPUT_joy_5200_max = 118;
+		}
+	if (JOY_SPEED_ADJUST == 8) {
+		INPUT_joy_5200_min = 105;
+		INPUT_joy_5200_max = 123;
+		}
+	if (JOY_SPEED_ADJUST == 7) {
+		INPUT_joy_5200_min = 100;
+		INPUT_joy_5200_max = 128;
+		}
+	if (JOY_SPEED_ADJUST == 6) {
+		INPUT_joy_5200_min = 95;
+		INPUT_joy_5200_max = 133;
+		}
+	if (JOY_SPEED_ADJUST == 5) {
+		INPUT_joy_5200_min = 90;
+		INPUT_joy_5200_max = 138;
+		}
+	if (JOY_SPEED_ADJUST == 4) {
+		INPUT_joy_5200_min = 85;
+		INPUT_joy_5200_max = 143;
+		}
+	if (JOY_SPEED_ADJUST == 3) {
+		INPUT_joy_5200_min = 80;
+		INPUT_joy_5200_max = 148;
+		}
+	if (JOY_SPEED_ADJUST == 2) {
+		INPUT_joy_5200_min = 75;
+		INPUT_joy_5200_max = 153;
+		}
+	if (JOY_SPEED_ADJUST == 1) {
+		INPUT_joy_5200_min = 50;
+		INPUT_joy_5200_max = 178;
+		}
+	if (JOY_SPEED_ADJUST == 0) {
+		INPUT_joy_5200_min = 20;
+		INPUT_joy_5200_max = 208;
+		}
 }
 
 static void get_platform_TRIG(Uint8 *t0, Uint8 *t1)
