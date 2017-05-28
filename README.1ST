@@ -11,7 +11,7 @@ This is a port of Atari800 with that adds:
 - Use second analog stick in first as second player stick: Robotron and Space Dungeon!!! (configurable axis),
   This is disabled until restart when player 2 joystick trigger 1 is pressed to prevent cheating in two player games.
 - Ability to define joysticks numbers.
-- Numerical 1-5 keys mapped to joystick buttons for games like Beamrider and Congo Bongo.
+- Numerical 0-9 keys mapped to joystick buttons for games like Beamrider and Congo Bongo.
 - Option key mapped to joystick button for games like Mr. Robot and his Robot Factory.
 - Config option to adjust joystick speed.
 
@@ -53,6 +53,11 @@ SDL_JOY_0_DIGIT_2=6                 <-- button ID
 SDL_JOY_0_DIGIT_3=7                 <-- button ID
 SDL_JOY_0_DIGIT_4=10                <-- button ID
 SDL_JOY_0_DIGIT_5=11                <-- button ID
+SDL_JOY_0_DIGIT_6=12                <-- button ID
+SDL_JOY_0_DIGIT_7=13                <-- button ID
+SDL_JOY_0_DIGIT_8=14                <-- button ID
+SDL_JOY_0_DIGIT_9=15                <-- button ID
+SDL_JOY_0_DIGIT_0=16                <-- button ID
 JOY_SPEED_ADJUST=8                  <-- accepted Values: 0 ~ 9 (higher = slower movement), anything else disables adjustment. 
 
 See sample.cfg
