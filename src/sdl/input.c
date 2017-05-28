@@ -72,6 +72,11 @@ static int JOY_0_DIGIT_2 = 6;
 static int JOY_0_DIGIT_3 = 7;
 static int JOY_0_DIGIT_4 = 10;
 static int JOY_0_DIGIT_5 = 11;
+static int JOY_0_DIGIT_6 = 12;
+static int JOY_0_DIGIT_7 = 13;
+static int JOY_0_DIGIT_8 = 14;
+static int JOY_0_DIGIT_9 = 15;
+static int JOY_0_DIGIT_0 = 16;
 static int JOY_0_INDEX = 0;
 static int JOY_1_INDEX = 1;
 static int JOY_SPEED_ADJUST = 10;
@@ -243,7 +248,27 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 	else if (strcmp(option, "JOY_0_DIGIT_5") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_5 = atoi(parameters);
 		return TRUE;
-	}	
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_6") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_6 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_7") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_7 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_8") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_8 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_9") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_9 = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "JOY_0_DIGIT_0") == 0) {
+		if (parameters != NULL) JOY_0_DIGIT_0 = atoi(parameters);
+		return TRUE;
+	}
 	else if (strcmp(option, "SDL_JOY_0_INDEX") == 0) {
 		if (parameters != NULL) JOY_0_INDEX = atoi(parameters);
 		return TRUE;
@@ -293,6 +318,11 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_DIGIT_3=%d\n", JOY_0_DIGIT_3);
 	fprintf(fp, "SDL_JOY_0_DIGIT_4=%d\n", JOY_0_DIGIT_4);
 	fprintf(fp, "SDL_JOY_0_DIGIT_5=%d\n", JOY_0_DIGIT_5);
+	fprintf(fp, "SDL_JOY_0_DIGIT_6=%d\n", JOY_0_DIGIT_6);
+	fprintf(fp, "SDL_JOY_0_DIGIT_7=%d\n", JOY_0_DIGIT_7);
+	fprintf(fp, "SDL_JOY_0_DIGIT_8=%d\n", JOY_0_DIGIT_8);
+	fprintf(fp, "SDL_JOY_0_DIGIT_9=%d\n", JOY_0_DIGIT_9);
+	fprintf(fp, "SDL_JOY_0_DIGIT_0=%d\n", JOY_0_DIGIT_0);
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
@@ -733,6 +763,11 @@ int PLATFORM_Keyboard(void)
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_5200_3;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_4)) return AKEY_5200_4;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_5)) return AKEY_5200_5;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_6)) return AKEY_5200_6;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_7)) return AKEY_5200_7;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_8)) return AKEY_5200_8;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_9)) return AKEY_5200_9;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_0)) return AKEY_5200_0;
 	} 
     	/* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
 	if (!UI_is_active) {
@@ -757,6 +792,11 @@ int PLATFORM_Keyboard(void)
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_3)) return AKEY_3;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_4)) return AKEY_4;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_5)) return AKEY_5;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_6)) return AKEY_6;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_7)) return AKEY_7;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_8)) return AKEY_8;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_9)) return AKEY_9;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_0)) return AKEY_0;
 	}
 	else {
 		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
