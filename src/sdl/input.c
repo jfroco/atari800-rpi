@@ -80,6 +80,7 @@ static int JOY_0_DIGIT_0 = 16;
 static int JOY_0_INDEX = 0;
 static int JOY_1_INDEX = 1;
 static int JOY_SPEED_ADJUST = 10;
+int TRUE_ANALOG_JOYSTICK = FALSE;
 
 /* joystick emulation
    keys are loaded from config file
@@ -280,7 +281,13 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 	else if (strcmp(option, "JOY_SPEED_ADJUST") == 0) {
 		if (parameters != NULL) JOY_SPEED_ADJUST = atoi(parameters);
 		return TRUE;
-	}	
+	}
+	else if (strcmp(option, "TRUE_ANALOG_JOYSTICK") == 0) {
+            if (parameters != NULL && parameters[0] == '1')
+            TRUE_ANALOG_JOYSTICK = TRUE;
+            else TRUE_ANALOG_JOYSTICK = FALSE;
+            return TRUE;
+	}
 	else
 		return FALSE;
 }
@@ -326,6 +333,8 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
+	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
+	fprintf(fp, "TRUE_ANALOG_JOYSTICK=%d\n", TRUE_ANALOG_JOYSTICK);
 }
 
 void PLATFORM_SetJoystickKey(int joystick, int direction, int value)
@@ -1502,6 +1511,43 @@ if (!delta) {
 
 	x = SDL_JoystickGetAxis(joystick, 0 + delta);
 	y = SDL_JoystickGetAxis(joystick, 1 + delta);
+
+	if (TRUE_ANALOG_JOYSTICK == TRUE && joystick0 != NULL){
+		int joy1_x = SDL_JoystickGetAxis(joystick0, 0);
+		int pot0 = (joy1_x/287.429824561)+114;
+		if(pot0 < 0) pot0 = 0;
+		if(pot0 > 227) pot0 = 227;
+		POKEY_POT_input[0] = pot0;
+		int joy1_y = SDL_JoystickGetAxis(joystick0, 1);
+		int pot1 = (joy1_y/287.429824561)+114;
+		if(pot1 < 0) pot1 = 0;
+		if(pot1 > 227) pot1 = 227;
+		POKEY_POT_input[1] = pot1;
+	}
+	if (TRUE_ANALOG_JOYSTICK == TRUE && joystick1 != NULL && JOY_0_SECOND_AXIS_ENABLED == FALSE){
+		int joy2_x = SDL_JoystickGetAxis(joystick1, 0);
+		int pot2 = (joy2_x/287.429824561)+114;
+		if(pot2 < 0) pot2 = 0;
+		if(pot2 > 227) pot2 = 227;
+		POKEY_POT_input[2] = pot2;
+		int joy2_y = SDL_JoystickGetAxis(joystick1, 1);
+		int pot3 = (joy2_y/287.429824561)+114;
+		if(pot3 < 0) pot3 = 0;
+		if(pot3 > 227) pot3 = 227;
+		POKEY_POT_input[3] = pot3;
+	}
+	if (TRUE_ANALOG_JOYSTICK == TRUE && joystick0 != NULL && joystick0 != NULL && JOY_0_SECOND_AXIS_ENABLED == TRUE){
+		int joy1_x2 = SDL_JoystickGetAxis(joystick0, 2);
+		int pot2 = (joy1_x2/287.429824561)+114;
+		if(pot2 < 0) pot2 = 0;
+		if(pot2 > 227) pot2 = 227;
+		POKEY_POT_input[2] = pot2;
+		int joy1_y2 = SDL_JoystickGetAxis(joystick0, 3);
+		int pot3 = (joy1_y2/287.429824561)+114;
+		if(pot3 < 0) pot3 = 0;
+		if(pot3 > 227) pot3 = 227;
+		POKEY_POT_input[3] = pot3;
+	}
 
 	if (x > minjoy) {
 		if (y < -minjoy)
