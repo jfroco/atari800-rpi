@@ -1512,38 +1512,70 @@ if (!delta) {
 	x = SDL_JoystickGetAxis(joystick, 0 + delta);
 	y = SDL_JoystickGetAxis(joystick, 1 + delta);
 
+	int JoyDiv = 287.429824561;
+	if (JOY_SPEED_ADJUST == 9) {
+		JoyDiv = 8000;
+		}
+	if (JOY_SPEED_ADJUST == 8) {
+		JoyDiv = 7000;
+		}
+	if (JOY_SPEED_ADJUST == 7) {
+		JoyDiv = 6000;
+		}
+	if (JOY_SPEED_ADJUST == 6) {
+		JoyDiv = 5000;
+		}
+	if (JOY_SPEED_ADJUST == 5) {
+		JoyDiv = 4000;
+		}
+	if (JOY_SPEED_ADJUST == 4) {
+		JoyDiv = 3000;
+		}
+	if (JOY_SPEED_ADJUST == 3) {
+		JoyDiv = 2000;
+		}
+	if (JOY_SPEED_ADJUST == 2) {
+		JoyDiv = 1000;
+		}
+	if (JOY_SPEED_ADJUST == 1) {
+		JoyDiv = 750;
+		}
+	if (JOY_SPEED_ADJUST == 0) {
+		JoyDiv = 500;
+		}
+
 	if (TRUE_ANALOG_JOYSTICK == TRUE && joystick0 != NULL){
 		int joy1_x = SDL_JoystickGetAxis(joystick0, 0);
-		int pot0 = (joy1_x/287.429824561)+114;
+		int pot0 = (joy1_x/JoyDiv)+114;
 		if(pot0 < 0) pot0 = 0;
 		if(pot0 > 227) pot0 = 227;
 		POKEY_POT_input[0] = pot0;
 		int joy1_y = SDL_JoystickGetAxis(joystick0, 1);
-		int pot1 = (joy1_y/287.429824561)+114;
+		int pot1 = (joy1_y/JoyDiv)+114;
 		if(pot1 < 0) pot1 = 0;
 		if(pot1 > 227) pot1 = 227;
 		POKEY_POT_input[1] = pot1;
 	}
 	if (TRUE_ANALOG_JOYSTICK == TRUE && joystick1 != NULL && JOY_0_SECOND_AXIS_ENABLED == FALSE){
 		int joy2_x = SDL_JoystickGetAxis(joystick1, 0);
-		int pot2 = (joy2_x/287.429824561)+114;
+		int pot2 = (joy2_x/JoyDiv)+114;
 		if(pot2 < 0) pot2 = 0;
 		if(pot2 > 227) pot2 = 227;
 		POKEY_POT_input[2] = pot2;
 		int joy2_y = SDL_JoystickGetAxis(joystick1, 1);
-		int pot3 = (joy2_y/287.429824561)+114;
+		int pot3 = (joy2_y/JoyDiv)+114;
 		if(pot3 < 0) pot3 = 0;
 		if(pot3 > 227) pot3 = 227;
 		POKEY_POT_input[3] = pot3;
 	}
 	if (TRUE_ANALOG_JOYSTICK == TRUE && joystick0 != NULL && joystick0 != NULL && JOY_0_SECOND_AXIS_ENABLED == TRUE){
 		int joy1_x2 = SDL_JoystickGetAxis(joystick0, 2);
-		int pot2 = (joy1_x2/287.429824561)+114;
+		int pot2 = (joy1_x2/JoyDiv)+114;
 		if(pot2 < 0) pot2 = 0;
 		if(pot2 > 227) pot2 = 227;
 		POKEY_POT_input[2] = pot2;
 		int joy1_y2 = SDL_JoystickGetAxis(joystick0, 3);
-		int pot3 = (joy1_y2/287.429824561)+114;
+		int pot3 = (joy1_y2/JoyDiv)+114;
 		if(pot3 < 0) pot3 = 0;
 		if(pot3 > 227) pot3 = 227;
 		POKEY_POT_input[3] = pot3;
