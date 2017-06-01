@@ -13,7 +13,7 @@ This is a port of Atari800 with that adds:
 - Ability to define joysticks numbers.
 - Numerical 0-9 keys mapped to joystick buttons for games like Beamrider and Congo Bongo.
 - Option key mapped to joystick button for games like Mr. Robot and his Robot Factory.
-- Config option to adjust joystick speed.
+- Config option to adjust joystick speed (restrict min/max joystick values).
 - Analog joystick support (for now this disables HAT and is limited to two joysticks)
 
 (Only player1)
