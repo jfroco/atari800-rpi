@@ -14,6 +14,7 @@ This is a port of Atari800 with that adds:
 - Numerical 0-9 keys mapped to joystick buttons for games like Beamrider and Congo Bongo.
 - Option key mapped to joystick button for games like Mr. Robot and his Robot Factory.
 - Config option to adjust joystick speed.
+- Analog joystick support (for now this disables HAT and is limited to two joysticks)
 
 (Only player1)
 
@@ -59,6 +60,7 @@ SDL_JOY_0_DIGIT_8=14                <-- button ID
 SDL_JOY_0_DIGIT_9=15                <-- button ID
 SDL_JOY_0_DIGIT_0=16                <-- button ID
 JOY_SPEED_ADJUST=8                  <-- accepted Values: 0 ~ 9 (higher = slower movement), anything else disables adjustment. 
+TRUE_ANALOG_JOYSTICK=0              <-- set to 1 for analog joystick input.
 
 See sample.cfg
 
