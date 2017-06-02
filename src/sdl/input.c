@@ -230,43 +230,43 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		JOY_0_SECOND_AXIS_ENABLED = (parameters != NULL && parameters[0] != '0');
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_1") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_1") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_1 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_2") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_2") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_2 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_3") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_3") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_3 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_4") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_4") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_4 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_5") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_5") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_5 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_6") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_6") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_6 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_7") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_7") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_7 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_8") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_8") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_8 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_9") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_9") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_9 = atoi(parameters);
 		return TRUE;
 	}
-	else if (strcmp(option, "JOY_0_DIGIT_0") == 0) {
+	else if (strcmp(option, "SDL_JOY_0_DIGIT_0") == 0) {
 		if (parameters != NULL) JOY_0_DIGIT_0 = atoi(parameters);
 		return TRUE;
 	}
