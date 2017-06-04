@@ -77,6 +77,8 @@ static int JOY_0_DIGIT_7 = 13;
 static int JOY_0_DIGIT_8 = 14;
 static int JOY_0_DIGIT_9 = 15;
 static int JOY_0_DIGIT_0 = 16;
+static int JOY_0_A52_PAUSE=17;
+static int JOY_0_A52_RESET=18;
 static int JOY_0_INDEX = 0;
 static int JOY_1_INDEX = 1;
 static int JOY_SPEED_ADJUST = 10;
@@ -288,6 +290,14 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
             else TRUE_ANALOG_JOYSTICK = FALSE;
             return TRUE;
 	}
+	else if (strcmp(option, "SDL_JOY_0_A52_PAUSE") == 0) {
+		if (parameters != NULL) JOY_0_A52_PAUSE = atoi(parameters);
+		return TRUE;
+	}
+	else if (strcmp(option, "SDL_JOY_0_A52_RESET") == 0) {
+		if (parameters != NULL) JOY_0_A52_RESET = atoi(parameters);
+		return TRUE;
+	}
 	else
 		return FALSE;
 }
@@ -330,6 +340,8 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_DIGIT_8=%d\n", JOY_0_DIGIT_8);
 	fprintf(fp, "SDL_JOY_0_DIGIT_9=%d\n", JOY_0_DIGIT_9);
 	fprintf(fp, "SDL_JOY_0_DIGIT_0=%d\n", JOY_0_DIGIT_0);
+	fprintf(fp, "SDL_JOY_0_A52_PAUSE=%d\n", JOY_0_A52_PAUSE);
+	fprintf(fp, "SDL_JOY_0_A52_RESET=%d\n", JOY_0_A52_RESET);
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
@@ -777,6 +789,8 @@ int PLATFORM_Keyboard(void)
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_8)) return AKEY_5200_8;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_9)) return AKEY_5200_9;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_DIGIT_0)) return AKEY_5200_0;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_A52_PAUSE)) return AKEY_5200_PAUSE;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_A52_RESET)) return AKEY_5200_RESET;
 	} 
     	/* Atari 800 / XL joystick Buttons for OPTION, SELECT & START & MENU NAVIGATION */
 	if (!UI_is_active) {
