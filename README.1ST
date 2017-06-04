@@ -6,7 +6,7 @@ This is a port of Atari800 with that adds:
 - Full Joystick support for RetroPie
 - Autoconfiguration of buttons using Retroarch configuration
 - Menu navigation using joystick
-- Joystick Button configuration: trigger1, trigger 2 (Moon Patrol and H.E.R.O.!), asterisk and hash. 
+- Joystick Button configuration: start, trigger1, trigger 2 (Moon Patrol and H.E.R.O.!), asterisk and hash. 
 - Supports hat and axis for joysticks
 - Use second analog stick in first as second player stick: Robotron and Space Dungeon!!! (configurable axis),
   This is disabled until restart when player 2 joystick trigger 1 is pressed to prevent cheating in two player games.
@@ -14,7 +14,8 @@ This is a port of Atari800 with that adds:
 - Numerical 0-9 keys mapped to joystick buttons for games like Beamrider and Congo Bongo.
 - Option key mapped to joystick button for games like Mr. Robot and his Robot Factory.
 - Config option to adjust joystick speed (restrict min/max joystick values).
-- Analog joystick support (for now this disables HAT and is limited to two joysticks)
+- Analog joystick support (for now this disables HAT and is limited to two joysticks).
+- A5200 reset and pause can be mapped to joystick buttons.
 
 (Only player1)
 
@@ -59,6 +60,8 @@ SDL_JOY_0_DIGIT_7=13                <-- button ID
 SDL_JOY_0_DIGIT_8=14                <-- button ID
 SDL_JOY_0_DIGIT_9=15                <-- button ID
 SDL_JOY_0_DIGIT_0=16                <-- button ID
+SDL_JOY_0_A52_PAUSE=17              <-- button ID
+SDL_JOY_0_A52_RESET=18              <-- button ID
 JOY_SPEED_ADJUST=8                  <-- accepted Values: 0 ~ 9 (higher = slower movement), anything else disables adjustment. 
 TRUE_ANALOG_JOYSTICK=0              <-- set to 1 for analog joystick input.
 
