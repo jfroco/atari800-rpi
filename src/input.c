@@ -64,9 +64,9 @@ int INPUT_joy_block_opposite_directions = 1;
 
 int INPUT_joy_multijoy = 0;
 
-int INPUT_joy_5200_min = 6;
+int INPUT_joy_5200_min = 0;
 int INPUT_joy_5200_center = 114;
-int INPUT_joy_5200_max = 220;
+int INPUT_joy_5200_max = 227;
 
 int INPUT_cx85 = 0;
 
