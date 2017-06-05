@@ -229,7 +229,9 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		return TRUE;
 	}
 	else if (strcmp(option, "SDL_JOY_0_SECOND_AXIS_ENABLED") == 0) {
-		JOY_0_SECOND_AXIS_ENABLED = (parameters != NULL && parameters[0] != '0');
+            if (parameters != NULL && (parameters[0] == '1' || parameters[0] == 'T'))
+            JOY_0_SECOND_AXIS_ENABLED = TRUE;
+            else JOY_0_SECOND_AXIS_ENABLED = FALSE;
 		return TRUE;
 	}
 	else if (strcmp(option, "SDL_JOY_0_DIGIT_1") == 0) {
@@ -285,7 +287,7 @@ int SDL_INPUT_ReadConfig(char *option, char *parameters)
 		return TRUE;
 	}
 	else if (strcmp(option, "TRUE_ANALOG_JOYSTICK") == 0) {
-            if (parameters != NULL && parameters[0] == '1')
+            if (parameters != NULL && (parameters[0] == '1' || parameters[0] == 'T'))
             TRUE_ANALOG_JOYSTICK = TRUE;
             else TRUE_ANALOG_JOYSTICK = FALSE;
             return TRUE;
