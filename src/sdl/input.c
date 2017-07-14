@@ -347,7 +347,6 @@ void SDL_INPUT_WriteConfig(FILE *fp)
 	fprintf(fp, "SDL_JOY_0_INDEX=%d\n", JOY_0_INDEX);
 	fprintf(fp, "SDL_JOY_1_INDEX=%d\n", JOY_1_INDEX);
 	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
-	fprintf(fp, "JOY_SPEED_ADJUST=%d\n", JOY_SPEED_ADJUST);
 	fprintf(fp, "TRUE_ANALOG_JOYSTICK=%d\n", TRUE_ANALOG_JOYSTICK);
 }
 
