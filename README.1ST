@@ -88,11 +88,26 @@ Compiled version:
     sudo cp atari800 atari800.original
     sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari800?raw=true -O atari800
     sudo chmod +x atari800
+    
+
+Per system/rom config files
+---------------------------
+
+I myself do not use the autoconfiguration script below as i prefer to have different configuration files based on system/rom.
+To achieve this i.e. add the following to emulators.cfg:
+
+atari5200="echo %ROM: -\ % > /dev/null;/opt/retropie/emulators/atari800/bin/atari800 -config /opt/retropie/configs/atari5200/atari5200.cfg -cart %ROM%"
+
+atari5200_custom1="echo %ROM: -\ % > /dev/null;/opt/retropie/emulators/atari800/bin/atari800 -config /opt/retropie/configs/atari5200/atari5200_custom1.cfg -cart %ROM%"
+
+atari800="echo %ROM: -\ % > /dev/null;/opt/retropie/emulators/atari800/bin/atari800 -config /opt/retropie/configs/atari800/atari800.cfg %ROM%"  
+
 
 Autoconfiguration
 -----------------
 
 You can auto-configure the first joystick to use the current joystick in EmulationStation/Retroarch:
+Please note this only works for the default config file (/home/pi/.atari800.cfg).
 
     cd /opt/retropie/emulators/atari800/bin/
     sudo wget https://github.com/jfroco/atari800-rpi/blob/master/atari5200.py?raw=true -O atari5200.py
