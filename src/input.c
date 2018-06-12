@@ -64,9 +64,9 @@ int INPUT_joy_block_opposite_directions = 1;
 
 int INPUT_joy_multijoy = 0;
 
-int INPUT_joy_5200_min = 6;
+int INPUT_joy_5200_min = 0;
 int INPUT_joy_5200_center = 114;
-int INPUT_joy_5200_max = 220;
+int INPUT_joy_5200_max = 227;
 
 int INPUT_cx85 = 0;
 
@@ -634,18 +634,20 @@ void INPUT_Frame(void)
 				continue;
 			/* if analog js is unused, alternatively try keypad */
 #endif
-			if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_LEFT)) == 0)
-				POKEY_POT_input[2 * i] = INPUT_joy_5200_min;
-			else if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_RIGHT)) == 0)
-				POKEY_POT_input[2 * i] = INPUT_joy_5200_max;
-			else
-				POKEY_POT_input[2 * i] = INPUT_joy_5200_center;
-			if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_FORWARD)) == 0)
-				POKEY_POT_input[2 * i + 1] = INPUT_joy_5200_min;
-			else if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_BACK)) == 0)
-				POKEY_POT_input[2 * i + 1] = INPUT_joy_5200_max;
-			else
-				POKEY_POT_input[2 * i + 1] = INPUT_joy_5200_center;
+			if (TRUE_ANALOG_JOYSTICK != TRUE) {
+				if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_LEFT)) == 0)
+					POKEY_POT_input[2 * i] = INPUT_joy_5200_min;
+				else if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_RIGHT)) == 0)
+					POKEY_POT_input[2 * i] = INPUT_joy_5200_max;
+				else
+					POKEY_POT_input[2 * i] = INPUT_joy_5200_center;
+				if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_FORWARD)) == 0)
+					POKEY_POT_input[2 * i + 1] = INPUT_joy_5200_min;
+				else if ((STICK[i] & (INPUT_STICK_CENTRE ^ INPUT_STICK_BACK)) == 0)
+					POKEY_POT_input[2 * i + 1] = INPUT_joy_5200_max;
+				else
+					POKEY_POT_input[2 * i + 1] = INPUT_joy_5200_center;
+			}
 		}
 	}
 

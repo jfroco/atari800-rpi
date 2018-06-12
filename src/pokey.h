@@ -52,6 +52,7 @@ extern int POKEY_DELAYED_SEROUT_IRQ;
 extern int POKEY_DELAYED_XMTDONE_IRQ;
 
 extern UBYTE POKEY_POT_input[8];
+extern int TRUE_ANALOG_JOYSTICK;
 
 ULONG POKEY_GetRandomCounter(void);
 void POKEY_SetRandomCounter(ULONG value);

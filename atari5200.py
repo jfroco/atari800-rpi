@@ -93,7 +93,7 @@ for line in lines:
         line = "SDL_JOY_0_ASTERISK=%s" % SDL_JOY_0_ASTERISK
     elif line.startswith("SDL_JOY_0_HASH"):
         line = "SDL_JOY_0_HASH=%s" % SDL_JOY_0_HASH
-    elif line.startswith("SDL_JOY_0_SECOND_AXIS"):
+    elif line.startswith("SDL_JOY_0_SECOND_AXIS="):
         line = "SDL_JOY_0_SECOND_AXIS=%s" % SDL_JOY_0_SECOND_AXIS
     new_data += line + "\n"
 
