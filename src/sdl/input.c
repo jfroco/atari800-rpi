@@ -705,13 +705,6 @@ int PLATFORM_Keyboard(void)
 	}
 	if (select && start) {
 		return AKEY_EXIT;
-	} else {
-		if (select) {
-			INPUT_key_consol &= (~INPUT_CONSOL_SELECT);
-		}
-		if (start) {
-			INPUT_key_consol &= (~INPUT_CONSOL_START);
-		}
 	}
 	if (!UI_is_active) {
 		if (start) {
@@ -732,6 +725,12 @@ int PLATFORM_Keyboard(void)
 			return AKEY_5200_HASH;
 		}
 	} else {
+		if (select) {
+			INPUT_key_consol &= (~INPUT_CONSOL_SELECT);
+		}
+		if (start) {
+			INPUT_key_consol &= (~INPUT_CONSOL_START);
+		}
 		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
 		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
 		if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
