@@ -1,3 +1,19 @@
+This Version includes a mapping of SELECT and START keys to Joystick (XBox One Wireless) buttons.
+The logging has been enhanced. A log file location can be configured. An additional logging option in atari800.cfg can be used to find the right joystick button IDs to use.
+
+Configuration:
+Atari 800 Emulator, Version 3.1.0
+LOGFILE=/home/retrouser/.emulationstation/atari800.log
+LOG_DEBUG_SDL_BUTTONS=0                             <-- put in "1" for log output of the pressed joystick buttons
+...
+...
+SDL_JOY_0_SELECT=6                                  <-- these are my IDs for SELECT and START
+SDL_JOY_0_START=7
+...
+...
+
+
+
 RPI version for Atari 5200 emulation
 ------------------------------------
 
