@@ -85,7 +85,7 @@ int PLATFORM_Initialise(int *argc, char *argv[])
 #endif /* HAVE_WINDOWS_H */
 		;
 		if (SDL_InitSubSystem(i) != 0) {
-			Log_print("SDL_InitSubSystem FAILED: %s", SDL_GetError());
+			Log_println("SDL_InitSubSystem FAILED: %s", SDL_GetError());
 			Log_flushlog();
 			exit(-1);
 		}
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 	   the console window would cause emulator crash due to the sound
 	   subsystem being active. */
 	if(!SetConsoleCtrlHandler((PHANDLER_ROUTINE) CtrlHandler, TRUE)) {
-		Log_print("ERROR: Could not set console control handler");
+		Log_println("ERROR: Could not set console control handler");
 		return 1;
 	}
 #endif /* HAVE_WINDOWS_H */

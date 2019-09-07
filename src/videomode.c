@@ -1112,43 +1112,43 @@ int VIDEOMODE_Initialise(int *argc, char *argv[])
 #endif /* COLUMN_80 */
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-win-width <num>            Host window width");
-				Log_print("\t-win-height <num>           Host window height");
-				Log_print("\t-fs-width <num>             Host fullscreen width");
-				Log_print("\t-fs-height <num>            Host fullscreen height");
-				Log_print("\t-fullscreen                 Run fullscreen");
-				Log_print("\t-windowed                   Run in window");
-				Log_print("\t-horiz-area narrow|tv|full|<number>");
-				Log_print("\t                            Set horizontal view area");
-				Log_print("\t-vert-area short|tv|full|<number>");
-				Log_print("\t                            Set vertical view area");
-				Log_print("\t-horiz-shift <num>          Set horizontal shift of the visible area (-%i..%i)", VIDEOMODE_MAX_HORIZONTAL_AREA, VIDEOMODE_MAX_HORIZONTAL_AREA);
-				Log_print("\t-vert-shift <num>           Set vertical shift of the visible area (-%i..%i)", VIDEOMODE_MAX_VERTICAL_AREA, VIDEOMODE_MAX_VERTICAL_AREA);
-				Log_print("\t-stretch none|integral|full|<number>");
-				Log_print("\t                            Set method of image stretching");
-				Log_print("\t-fit-screen width|height|both");
-				Log_print("\t                            Set method of image fitting the screen");
-				Log_print("\t-image-aspect none|square-pixels|real");
-				Log_print("\t                            Set image aspect ratio");
+				Log_println("\t-win-width <num>            Host window width");
+				Log_println("\t-win-height <num>           Host window height");
+				Log_println("\t-fs-width <num>             Host fullscreen width");
+				Log_println("\t-fs-height <num>            Host fullscreen height");
+				Log_println("\t-fullscreen                 Run fullscreen");
+				Log_println("\t-windowed                   Run in window");
+				Log_println("\t-horiz-area narrow|tv|full|<number>");
+				Log_println("\t                            Set horizontal view area");
+				Log_println("\t-vert-area short|tv|full|<number>");
+				Log_println("\t                            Set vertical view area");
+				Log_println("\t-horiz-shift <num>          Set horizontal shift of the visible area (-%i..%i)", VIDEOMODE_MAX_HORIZONTAL_AREA, VIDEOMODE_MAX_HORIZONTAL_AREA);
+				Log_println("\t-vert-shift <num>           Set vertical shift of the visible area (-%i..%i)", VIDEOMODE_MAX_VERTICAL_AREA, VIDEOMODE_MAX_VERTICAL_AREA);
+				Log_println("\t-stretch none|integral|full|<number>");
+				Log_println("\t                            Set method of image stretching");
+				Log_println("\t-fit-screen width|height|both");
+				Log_println("\t                            Set method of image fitting the screen");
+				Log_println("\t-image-aspect none|square-pixels|real");
+				Log_println("\t                            Set image aspect ratio");
 #if SUPPORTS_ROTATE_VIDEOMODE
-				Log_print("\t-rotate90                   Rotate the screen sideways");
-				Log_print("\t-no-rotate90                Don't rotate the screen");
+				Log_println("\t-rotate90                   Rotate the screen sideways");
+				Log_println("\t-no-rotate90                Don't rotate the screen");
 #endif /* SUPPORTS_ROTATE_VIDEOMODE */
-				Log_print("\t-host-aspect-ratio auto|<w>:<h>");
-				Log_print("\t                            Set host display aspect ratio");
+				Log_println("\t-host-aspect-ratio auto|<w>:<h>");
+				Log_println("\t                            Set host display aspect ratio");
 #if COLUMN_80
-				Log_print("\t-80column                   Show output of an 80 column card, if present");
-				Log_print("\t-no-80column                Show standard screen output");
+				Log_println("\t-80column                   Show output of an 80 column card, if present");
+				Log_println("\t-no-80column                Show standard screen output");
 #endif
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		} else if (a_i) {
-			Log_print("Invalid argument for '%s'", argv[--i]);
+			Log_println("Invalid argument for '%s'", argv[--i]);
 			return FALSE;
 		}
 	}
@@ -1190,14 +1190,14 @@ int VIDEOMODE_InitialiseDisplay(void)
 	/* PLATFORM_Initialise must be called earlier! */
 	resolutions = PLATFORM_AvailableResolutions(&resolutions_size);
 	if (resolutions == NULL) {
-		Log_print("Fatal error: System reports no display resolutions available");
+		Log_println("Fatal error: System reports no display resolutions available");
 		return FALSE;
 	}
 
 	qsort(resolutions, resolutions_size, sizeof(VIDEOMODE_resolution_t), &CompareResolutions);
 	RemoveDuplicateResolutions();
 	if (resolutions_size == 0) {
-		Log_print("Fatal error: System reports no resolution higher than minimal %ux%u available",
+		Log_println("Fatal error: System reports no resolution higher than minimal %ux%u available",
 		          display_modes[0].min_w, display_modes[0].min_h);
 		return FALSE;
 	}
@@ -1211,12 +1211,12 @@ int VIDEOMODE_InitialiseDisplay(void)
 	if (current_resolution >= resolutions_size) {
 		/* No resolution found, using the biggest one. */
 		current_resolution = resolutions_size - 1;
-		Log_print("Requested resolution %ux%u is too big, using %ux%u instead.",
+		Log_println("Requested resolution %ux%u is too big, using %ux%u instead.",
 		          init_fs_resolution.width, init_fs_resolution.height,
 		          resolutions[current_resolution].width, resolutions[current_resolution].height);
 	} else if (resolutions[current_resolution].width != init_fs_resolution.width ||
 	           resolutions[current_resolution].height != init_fs_resolution.height)
-		Log_print("Requested resolution %ux%u is not available, using %ux%u instead.",
+		Log_println("Requested resolution %ux%u is not available, using %ux%u instead.",
 		          init_fs_resolution.width, init_fs_resolution.height,
 		          resolutions[current_resolution].width, resolutions[current_resolution].height);
 	/* Autodetect host display aspect ratio if requested. */
@@ -1225,7 +1225,7 @@ int VIDEOMODE_InitialiseDisplay(void)
 
 	UpdateTvSystemSettings();
 	if (!VIDEOMODE_Update()) {
-		Log_print("Fatal error: Cannot initialise video");
+		Log_println("Fatal error: Cannot initialise video");
 		return FALSE;
 	}
 #if SUPPORTS_PLATFORM_PALETTEUPDATE

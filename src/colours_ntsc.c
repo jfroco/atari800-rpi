@@ -298,20 +298,20 @@ int COLOURS_NTSC_Initialise(int *argc, char *argv[])
 			COLOURS_NTSC_external.adjust = TRUE;
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-ntsc-saturation <num>  Set NTSC color saturation");
-				Log_print("\t-ntsc-contrast <num>    Set NTSC contrast");
-				Log_print("\t-ntsc-brightness <num>  Set NTSC brightness");
-				Log_print("\t-ntsc-gamma <num>       Set NTSC color gamma factor");
-				Log_print("\t-ntsc-tint <num>        Set NTSC tint");
-				Log_print("\t-ntsc-colordelay <num>  Set NTSC GTIA color delay");
-				Log_print("\t-paletten <filename>    Load NTSC external palette");
-				Log_print("\t-paletten-adjust        Apply adjustments to NTSC external palette");
+				Log_println("\t-ntsc-saturation <num>  Set NTSC color saturation");
+				Log_println("\t-ntsc-contrast <num>    Set NTSC contrast");
+				Log_println("\t-ntsc-brightness <num>  Set NTSC brightness");
+				Log_println("\t-ntsc-gamma <num>       Set NTSC color gamma factor");
+				Log_println("\t-ntsc-tint <num>        Set NTSC tint");
+				Log_println("\t-ntsc-colordelay <num>  Set NTSC GTIA color delay");
+				Log_println("\t-paletten <filename>    Load NTSC external palette");
+				Log_println("\t-paletten-adjust        Apply adjustments to NTSC external palette");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -319,7 +319,7 @@ int COLOURS_NTSC_Initialise(int *argc, char *argv[])
 
 	/* Try loading an external palette if needed. */
 	if (COLOURS_NTSC_external.loaded && !COLOURS_EXTERNAL_Read(&COLOURS_NTSC_external))
-		Log_print("Cannot read NTSC palette from %s", COLOURS_NTSC_external.filename);
+		Log_println("Cannot read NTSC palette from %s", COLOURS_NTSC_external.filename);
 	
 	return TRUE;
 }

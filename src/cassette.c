@@ -150,15 +150,15 @@ int CASSETTE_Initialise(int *argc, char *argv[])
 			protect = TRUE;
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-tape <file>      Insert cassette image");
-				Log_print("\t-boottape <file>  Insert cassette image and boot it");
-				Log_print("\t-tape-readonly    Mark the attached cassette image as read-only");
+				Log_println("\t-tape <file>      Insert cassette image");
+				Log_println("\t-boottape <file>  Insert cassette image and boot it");
+				Log_println("\t-tape-readonly    Mark the attached cassette image as read-only");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -172,7 +172,7 @@ int CASSETTE_Initialise(int *argc, char *argv[])
 		protect = protect || CASSETTE_write_protect;
 		if (!CASSETTE_Insert(CASSETTE_filename)) {
 			CASSETTE_status = CASSETTE_STATUS_NONE;
-			Log_print("Cannot open cassette image %s", CASSETTE_filename);
+			Log_println("Cannot open cassette image %s", CASSETTE_filename);
 		}
 		else if (protect)
 			CASSETTE_ToggleWriteProtect();

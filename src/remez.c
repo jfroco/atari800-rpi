@@ -602,7 +602,7 @@ void REMEZ_CreateFilter(double h[], int numtaps, int numband, double bands[],
 	}
 #ifndef ASAP
 	if (iter == MAXITERATIONS) {
-		Log_print("remez(): reached maximum iteration count. Results may be bad.");
+		Log_println("remez(): reached maximum iteration count. Results may be bad.");
 	}
 #endif
 

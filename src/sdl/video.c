@@ -324,7 +324,7 @@ void SDL_VIDEO_WriteConfig(FILE *fp)
 void SDL_VIDEO_InitSDL(void)
 {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-			Log_print("SDL_INIT_VIDEO FAILED: %s", SDL_GetError());
+			Log_println("SDL_INIT_VIDEO FAILED: %s", SDL_GetError());
 			Log_flushlog();
 			exit(-1);
 	}
@@ -401,21 +401,21 @@ int SDL_VIDEO_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-scanlines        Set visibility of scanlines (0..100)");
-				Log_print("\t-scanlinesint     Enable scanlines interpolation");
-				Log_print("\t-no-scanlinesint  Disable scanlines interpolation");
+				Log_println("\t-scanlines        Set visibility of scanlines (0..100)");
+				Log_println("\t-scanlinesint     Enable scanlines interpolation");
+				Log_println("\t-no-scanlinesint  Disable scanlines interpolation");
 #if HAVE_OPENGL
-				Log_print("\t-video-accel      Use hardware video acceleration");
-				Log_print("\t-no-video-accel   Don't use hardware video acceleration");
+				Log_println("\t-video-accel      Use hardware video acceleration");
+				Log_println("\t-no-video-accel   Don't use hardware video acceleration");
 #endif /* HAVE_OPENGL */
-				Log_print("\t-vsync            Synchronize display to vertical retrace");
-				Log_print("\t-no-vsync         Don't synchronize display to vertical retrace");
+				Log_println("\t-vsync            Synchronize display to vertical retrace");
+				Log_println("\t-no-vsync         Don't synchronize display to vertical retrace");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}

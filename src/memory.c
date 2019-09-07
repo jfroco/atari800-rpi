@@ -596,7 +596,7 @@ void MEMORY_StateRead(UBYTE SaveVerbose, UBYTE StateVersion)
 		}
 		if (!MEMORY_SizeValid(MEMORY_ram_size)) {
 			MEMORY_ram_size = 64;
-			Log_print("Warning: Bad RAM size read in from state save, defaulting to 64 KB");
+			Log_println("Warning: Bad RAM size read in from state save, defaulting to 64 KB");
 		}
 
 		/* Read PORTB and set variables that are based on it. */
@@ -919,7 +919,7 @@ static void MosaicPutByte(UWORD addr, UBYTE byte)
 	int newbank;
 	if (addr < 0xffc0) return;
 #ifdef DEBUG
-	Log_print("MosaicPutByte:%4X:%2X",addr,byte);
+	Log_println("MosaicPutByte:%4X:%2X",addr,byte);
 #endif
 	newbank = addr - 0xffc0;
 	if (newbank == mosaic_curbank || (newbank >= mosaic_current_num_banks && mosaic_curbank >= mosaic_current_num_banks)) return; /*same bank or rom -> rom*/
@@ -946,7 +946,7 @@ static void MosaicPutByte(UWORD addr, UBYTE byte)
 static UBYTE MosaicGetByte(UWORD addr, int no_side_effects)
 {
 #ifdef DEBUG
-	Log_print("MosaicGetByte%4X",addr);
+	Log_println("MosaicGetByte%4X",addr);
 #endif
 	return MEMORY_mem[addr];
 }
@@ -969,7 +969,7 @@ static void AxlonPutByte(UWORD addr, UBYTE byte)
 	if ((addr&0xff00) == 0x0f00) MEMORY_mem[addr] = byte;
 	if ((addr&0xff) < 0xc0) return; /*0xffc0-0xffff and 0x0fc0-0x0fff only*/
 #ifdef DEBUG
-	Log_print("AxlonPutByte:%4X:%2X", addr, byte);
+	Log_println("AxlonPutByte:%4X:%2X", addr, byte);
 #endif
 	newbank = (byte&axlon_current_bankmask);
 	if (newbank == axlon_curbank) return;
@@ -981,7 +981,7 @@ static void AxlonPutByte(UWORD addr, UBYTE byte)
 static UBYTE AxlonGetByte(UWORD addr, int no_side_effects)
 {
 #ifdef DEBUG
-	Log_print("AxlonGetByte%4X",addr);
+	Log_println("AxlonGetByte%4X",addr);
 #endif
 	return MEMORY_mem[addr];
 }

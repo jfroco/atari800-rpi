@@ -693,7 +693,7 @@ static void ColdStart(void)
 static void InputWord(int word)
 {
 	input_queue[input_count] = word;
-/*	Log_print("XEP80 -> %03x [i]", word, input_count);*/
+/*	Log_println("XEP80 -> %03x [i]", word, input_count);*/
 	input_count++;
 }
 
@@ -1446,7 +1446,7 @@ static void SetReserved(UBYTE byte)
 		   111111101: Set XMTR
 		   111111110: Ignore
 		   111111111: Strobe the parallel port */
-		Log_print("XEP80 received not emulated command %03h", 0x100 & byte);
+		Log_println("XEP80 received not emulated command %03h", 0x100 & byte);
 	}
 	last_char = byte - 0x1f;
 }
@@ -1610,7 +1610,7 @@ static void OutputWord(int word)
 					   111001101: Get VPEN
 					   111001110: Get STAT
 					   111001111: Get RCVR */
-					Log_print("XEP80 received not emulated command %03h", word);
+					Log_println("XEP80 received not emulated command %03h", word);
 				}
 			}
 			break;
@@ -1670,7 +1670,7 @@ int XEP80_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				XEP80_port = Util_sscandec(argv[++i]);
 				if (XEP80_port != 0 && XEP80_port != 1) {
-					Log_print("Invalid XEP80 port - should be 0 or 1");
+					Log_println("Invalid XEP80 port - should be 0 or 1");
 					return FALSE;
 				}
 			}
@@ -1679,14 +1679,14 @@ int XEP80_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-xep80           Emulate the XEP80");
-				Log_print("\t-xep80port <n>   Use XEP80 on joystick port <n>");
+				Log_println("\t-xep80           Emulate the XEP80");
+				Log_println("\t-xep80port <n>   Use XEP80 on joystick port <n>");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -1697,7 +1697,7 @@ int XEP80_Initialise(int *argc, char *argv[])
 
 	if (XEP80_enabled && !XEP80_SetEnabled(XEP80_enabled)) {
 		XEP80_enabled = FALSE;
-		Log_print("Couldn't load XEP80 charset image: %s", charset_filename);
+		Log_println("Couldn't load XEP80 charset image: %s", charset_filename);
 		return FALSE;
 	}
 
@@ -1807,7 +1807,7 @@ void XEP80_PutBit(UBYTE byte)
 				   driver. */
 				start_trans_cpu_clock += 11 * ANTIC_LINE_C + ANTIC_LINE_C / 2;
 				/* Handle the new word */
-/*				Log_print("XEP80 <- %03x", output_word);*/
+/*				Log_println("XEP80 <- %03x", output_word);*/
 				OutputWord(output_word);
 			}
 			return;

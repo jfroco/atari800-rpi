@@ -101,7 +101,7 @@ void VOTRAXSND_Init(int playback_freq, int n_pokeys, int b16)
 	num_pokeys = n_pokeys;
 	if (!votraxsnd_enabled()) return;
 	if (num_pokeys != 1 && num_pokeys != 2) {
-		Log_print("VOTRAXSND_Init: cannot handle num_pokeys=%d", num_pokeys);
+		Log_println("VOTRAXSND_Init: cannot handle num_pokeys=%d", num_pokeys);
 #ifdef PBI_XLD
 		PBI_XLD_v_enabled = FALSE;
 #endif

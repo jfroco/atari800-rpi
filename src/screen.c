@@ -115,7 +115,7 @@ static void Screen_SetScreenshotFilenamePattern(const char *p)
 			return; /* ok */
 		p++;
 	}
-	Log_print("Invalid filename pattern for screenshots, using default.");
+	Log_println("Invalid filename pattern for screenshots, using default.");
 	strcpy(screenshot_filename_format, DEFAULT_SCREENSHOT_FILENAME_FORMAT);
 	screenshot_no_max = 1000;
 }
@@ -141,14 +141,14 @@ int Screen_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-screenshots <p> Set filename pattern for screenshots");
-				Log_print("\t-showspeed       Show percentage of actual speed");
+				Log_println("\t-screenshots <p> Set filename pattern for screenshots");
+				Log_println("\t-showspeed       Show percentage of actual speed");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}

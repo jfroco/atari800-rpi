@@ -101,22 +101,22 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 
 	fp = fopen(fname, "r");
 	if (fp == NULL) {
-		Log_print("User config file '%s' not found.", rtconfig_filename);
+		Log_println("User config file '%s' not found.", rtconfig_filename);
 
 #ifdef SYSTEM_WIDE_CFG_FILE
 		/* try system wide config file */
 		fname = SYSTEM_WIDE_CFG_FILE;
-		Log_print("Trying system wide config file: %s", fname);
+		Log_println("Trying system wide config file: %s", fname);
 		fp = fopen(fname, "r");
 #endif
 		if (fp == NULL) {
-			Log_print("No configuration file found, will create fresh one from scratch:");
+			Log_println("No configuration file found, will create fresh one from scratch:");
 			return FALSE;
 		}
 	}
 
 	if (fgets(string, sizeof(string), fp) != NULL) {
-		Log_print("Using Atari800 config file: %s\nCreated by %s", fname, string);
+		Log_println("Using Atari800 config file: %s\nCreated by %s", fname, string);
 	}
 
 	while (fgets(string, sizeof(string), fp)) {
@@ -139,13 +139,13 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 #else
 			else if (strcmp(string, "ATARI_FILES_DIR") == 0) {
 				if (UI_n_atari_files_dir >= UI_MAX_DIRECTORIES)
-					Log_print("All ATARI_FILES_DIR slots used!");
+					Log_println("All ATARI_FILES_DIR slots used!");
 				else
 					Util_strlcpy(UI_atari_files_dir[UI_n_atari_files_dir++], ptr, FILENAME_MAX);
 			}
 			else if (strcmp(string, "SAVED_FILES_DIR") == 0) {
 				if (UI_n_saved_files_dir >= UI_MAX_DIRECTORIES)
-					Log_print("All SAVED_FILES_DIR slots used!");
+					Log_println("All SAVED_FILES_DIR slots used!");
 				else
 					Util_strlcpy(UI_saved_files_dir[UI_n_saved_files_dir++], ptr, FILENAME_MAX);
 			}
@@ -169,7 +169,7 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 
 			else if (strcmp(string, "PRINT_COMMAND") == 0) {
 				if (!Devices_SetPrintCommand(ptr))
-					Log_print("Unsafe PRINT_COMMAND ignored");
+					Log_println("Unsafe PRINT_COMMAND ignored");
 			}
 
 			else if (strcmp(string, "SCREEN_REFRESH_RATIO") == 0)
@@ -224,7 +224,7 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 				else if (strcmp(ptr, "Atari 5200") == 0)
 					Atari800_machine_type = Atari800_MACHINE_5200;
 				else
-					Log_print("Invalid machine type: %s", ptr);
+					Log_println("Invalid machine type: %s", ptr);
 			}
 			else if (strcmp(string, "RAM_SIZE") == 0) {
 				if (strcmp(ptr, "320 (RAMBO)") == 0)
@@ -236,7 +236,7 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 					if (MEMORY_SizeValid(size))
 						MEMORY_ram_size = size;
 					else
-						Log_print("Invalid RAM size: %s", ptr);
+						Log_println("Invalid RAM size: %s", ptr);
 				}
 			}
 			else if (strcmp(string, "DEFAULT_TV_MODE") == 0) {
@@ -245,21 +245,21 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 				else if (strcmp(ptr, "NTSC") == 0)
 					Atari800_tv_mode = Atari800_TV_NTSC;
 				else
-					Log_print("Invalid TV Mode: %s", ptr);
+					Log_println("Invalid TV Mode: %s", ptr);
 			}
 			else if (strcmp(string, "MOSAIC_RAM_NUM_BANKS") == 0) {
 				int num = Util_sscandec(ptr);
 				if (num >= 0 && num <= 64)
 					MEMORY_mosaic_num_banks = num;
 				else
-					Log_print("Invalid Mosaic RAM number of banks: %s", ptr);
+					Log_println("Invalid Mosaic RAM number of banks: %s", ptr);
 			}
 			else if (strcmp(string, "AXLON_RAM_NUM_BANKS") == 0) {
 				int num = Util_sscandec(ptr);
 				if (num == 0 || num == 8 || num == 16 || num == 32 || num == 64 || num == 128 || num == 256)
 					MEMORY_axlon_num_banks = num;
 				else
-					Log_print("Invalid Mosaic RAM number of banks: %s", ptr);
+					Log_println("Invalid Mosaic RAM number of banks: %s", ptr);
 			}
 			else if (strcmp(string, "ENABLE_MAPRAM") == 0)
 				MEMORY_enable_mapram = Util_sscanbool(ptr);
@@ -315,25 +315,27 @@ int CFG_LoadConfig(const char *alternate_config_filename)
 			else if (Sound_ReadConfig(string, ptr)) {
 			}
 #endif /* defined(SOUND) && defined(SOUND_THIN_API) */
+			else if (Log_ReadConfig(string, ptr)) {
+			}
 			else {
 #ifdef SUPPORTS_PLATFORM_CONFIGURE
 				if (!PLATFORM_Configure(string, ptr)) {
-					Log_print("Unrecognized variable or bad parameters: '%s=%s'", string, ptr);
+					Log_println("Unrecognized variable or bad parameters: '%s=%s'", string, ptr);
 				}
 #else
-				Log_print("Unrecognized variable: %s", string);
+				Log_println("Unrecognized variable: %s", string);
 #endif
 			}
 		}
 		else {
-			Log_print("Ignored config line: %s", string);
+			Log_println("Ignored config line: %s", string);
 		}
 	}
 
 	fclose(fp);
 #ifndef BASIC
 	if (was_obsolete_dir) {
-		Log_print(
+		Log_println(
 			"DISK_DIR, ROM_DIR, EXE_DIR and STATE_DIR configuration options\n"
 			"are no longer supported. Please use ATARI_FILES_DIR\n"
 			"and SAVED_FILES_DIR in your Atari800 configuration file.");
@@ -353,12 +355,13 @@ int CFG_WriteConfig(void)
 	fp = fopen(rtconfig_filename, "w");
 	if (fp == NULL) {
 		perror(rtconfig_filename);
-		Log_print("Cannot write to config file: %s", rtconfig_filename);
+		Log_println("Cannot write to config file: %s", rtconfig_filename);
 		return FALSE;
 	}
-	Log_print("Writing config file: %s", rtconfig_filename);
+	Log_println("Writing config file: %s", rtconfig_filename);
 
 	fprintf(fp, "%s\n", Atari800_TITLE);
+	Log_WriteConfig(fp);
 	SYSROM_WriteConfig(fp);
 #ifndef BASIC
 	for (i = 0; i < UI_n_atari_files_dir; i++)

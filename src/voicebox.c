@@ -47,8 +47,8 @@ int VOICEBOX_Initialise(int *argc, char *argv[])
 		}
 		else {
 		 	if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-voicebox        Emulate the Alien Group Voice Box I");
-				Log_print("\t-voiceboxii      Emulate the Alien Group Voice Box II");
+				Log_println("\t-voicebox        Emulate the Alien Group Voice Box I");
+				Log_println("\t-voiceboxii      Emulate the Alien Group Voice Box II");
 			}
 
 			argv[j++] = argv[i];

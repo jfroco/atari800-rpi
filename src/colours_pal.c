@@ -469,20 +469,20 @@ int COLOURS_PAL_Initialise(int *argc, char *argv[])
 			COLOURS_PAL_external.adjust = TRUE;
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-pal-saturation <num>  Set PAL color saturation");
-				Log_print("\t-pal-contrast <num>    Set PAL contrast");
-				Log_print("\t-pal-brightness <num>  Set PAL brightness");
-				Log_print("\t-pal-gamma <num>       Set PAL color gamma factor");
-				Log_print("\t-pal-tint <num>        Set PAL tint");
-				Log_print("\t-pal-colordelay <num>  Set PAL GTIA color delay");
-				Log_print("\t-palettep <filename>   Load PAL external palette");
-				Log_print("\t-palettep-adjust       Apply adjustments to PAL external palette");
+				Log_println("\t-pal-saturation <num>  Set PAL color saturation");
+				Log_println("\t-pal-contrast <num>    Set PAL contrast");
+				Log_println("\t-pal-brightness <num>  Set PAL brightness");
+				Log_println("\t-pal-gamma <num>       Set PAL color gamma factor");
+				Log_println("\t-pal-tint <num>        Set PAL tint");
+				Log_println("\t-pal-colordelay <num>  Set PAL GTIA color delay");
+				Log_println("\t-palettep <filename>   Load PAL external palette");
+				Log_println("\t-palettep-adjust       Apply adjustments to PAL external palette");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -490,7 +490,7 @@ int COLOURS_PAL_Initialise(int *argc, char *argv[])
 
 	/* Try loading an external palette if needed. */
 	if (COLOURS_PAL_external.loaded && !COLOURS_EXTERNAL_Read(&COLOURS_PAL_external))
-		Log_print("Cannot read PAL palette from %s", COLOURS_PAL_external.filename);
+		Log_println("Cannot read PAL palette from %s", COLOURS_PAL_external.filename);
 
 	return TRUE;
 }

@@ -560,7 +560,7 @@ void Devices_H_CloseAll(void)
 static void Devices_H_Init(void)
 {
 	if (devbug)
-		Log_print("HHINIT");
+		Log_println("HHINIT");
 	Devices_h_current_dir[0][0] = '\0';
 	Devices_h_current_dir[1][0] = '\0';
 	Devices_h_current_dir[2][0] = '\0';
@@ -609,20 +609,20 @@ int Devices_Initialise(int *argc, char *argv[])
 			devbug = TRUE;
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-H1 <path>       Set path for H1: device");
-				Log_print("\t-H2 <path>       Set path for H2: device");
-				Log_print("\t-H3 <path>       Set path for H3: device");
-				Log_print("\t-H4 <path>       Set path for H4: device");
-				Log_print("\t-Hpath <path>    Set path for Atari executables on the H: device");
-				Log_print("\t-hreadonly       Enable read-only mode for H: device");
-				Log_print("\t-hreadwrite      Disable read-only mode for H: device");
-				Log_print("\t-devbug          Debugging messages for H: and P: devices");
+				Log_println("\t-H1 <path>       Set path for H1: device");
+				Log_println("\t-H2 <path>       Set path for H2: device");
+				Log_println("\t-H3 <path>       Set path for H3: device");
+				Log_println("\t-H4 <path>       Set path for H4: device");
+				Log_println("\t-Hpath <path>    Set path for Atari executables on the H: device");
+				Log_println("\t-hreadonly       Enable read-only mode for H: device");
+				Log_println("\t-hreadwrite      Disable read-only mode for H: device");
+				Log_println("\t-devbug          Debugging messages for H: and P: devices");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -811,7 +811,7 @@ static void Devices_H_Open(void)
 #endif
 
 	if (devbug)
-		Log_print("HHOPEN");
+		Log_println("HHOPEN");
 
 	if (Devices_GetHostPath(TRUE) == 0)
 		return;
@@ -821,7 +821,7 @@ static void Devices_H_Open(void)
 
 #if 0
 	if (devbug)
-		Log_print("atari_filename=\"%s\", atari_path=\"%s\" host_path=\"%s\"", atari_filename, atari_path, host_path);
+		Log_println("atari_filename=\"%s\", atari_path=\"%s\" host_path=\"%s\"", atari_filename, atari_path, host_path);
 #endif
 
 	fp = NULL;
@@ -972,7 +972,7 @@ static void Devices_H_Open(void)
 static void Devices_H_Close(void)
 {
 	if (devbug)
-		Log_print("HHCLOS");
+		Log_println("HHCLOS");
 	if (!Devices_GetIOCB())
 		return;
 	if (h_fp[h_iocb] != NULL) {
@@ -986,7 +986,7 @@ static void Devices_H_Close(void)
 static void Devices_H_Read(void)
 {
 	if (devbug)
-		Log_print("HHREAD");
+		Log_println("HHREAD");
 	if (!Devices_GetIOCB())
 		return;
 	if (h_fp[h_iocb] != NULL) {
@@ -1052,7 +1052,7 @@ static void Devices_H_Read(void)
 static void Devices_H_Write(void)
 {
 	if (devbug)
-		Log_print("HHWRIT");
+		Log_println("HHWRIT");
 	if (!Devices_GetIOCB())
 		return;
 	if (h_fp[h_iocb] != NULL) {
@@ -1077,7 +1077,7 @@ static void Devices_H_Write(void)
 static void Devices_H_Status(void)
 {
 	if (devbug)
-		Log_print("HHSTAT");
+		Log_println("HHSTAT");
 
 	CPU_regY = 146; /* function not implemented in handler; XXX: check file existence? */
 	CPU_SetN;
@@ -1129,7 +1129,7 @@ static void Devices_H_Rename(void)
 	int readonly = FALSE;
 
 	if (devbug)
-		Log_print("RENAME Command");
+		Log_println("RENAME Command");
 	CHECK_READ_ONLY;
 
 	bufadr = Devices_GetHostPath(FALSE);
@@ -1193,7 +1193,7 @@ static void Devices_H_Rename(void)
 	}
 
 	if (devbug)
-		Log_print("%d renamed, %d failed, %d locked",
+		Log_println("%d renamed, %d failed, %d locked",
 		       num_changed, num_failed, num_locked);
 
 	if (num_locked) {
@@ -1222,7 +1222,7 @@ static void Devices_H_Delete(void)
 	int readonly = FALSE;
 
 	if (devbug)
-		Log_print("DELETE Command");
+		Log_println("DELETE Command");
 	CHECK_READ_ONLY;
 
 	if (Devices_GetHostPath(FALSE) == 0)
@@ -1251,7 +1251,7 @@ static void Devices_H_Delete(void)
 	}
 
 	if (devbug)
-		Log_print("%d deleted, %d failed, %d locked",
+		Log_println("%d deleted, %d failed, %d locked",
 		       num_deleted, num_failed, num_locked);
 
 	if (num_locked) {
@@ -1298,7 +1298,7 @@ static void Devices_H_LockUnlock(int readonly)
 	}
 
 	if (devbug)
-		Log_print("%d changed, %d failed",
+		Log_println("%d changed, %d failed",
 		       num_changed, num_failed);
 
 	if (num_failed != 0 || num_changed == 0) {
@@ -1314,14 +1314,14 @@ static void Devices_H_LockUnlock(int readonly)
 static void Devices_H_Lock(void)
 {
 	if (devbug)
-		Log_print("LOCK Command");
+		Log_println("LOCK Command");
 	Devices_H_LockUnlock(TRUE);
 }
 
 static void Devices_H_Unlock(void)
 {
 	if (devbug)
-		Log_print("UNLOCK Command");
+		Log_println("UNLOCK Command");
 	Devices_H_LockUnlock(FALSE);
 }
 
@@ -1330,7 +1330,7 @@ static void Devices_H_Unlock(void)
 static void Devices_H_Note(void)
 {
 	if (devbug)
-		Log_print("NOTE Command");
+		Log_println("NOTE Command");
 	if (!Devices_GetIOCB())
 		return;
 	if (h_fp[h_iocb] != NULL) {
@@ -1360,7 +1360,7 @@ static void Devices_H_Note(void)
 static void Devices_H_Point(void)
 {
 	if (devbug)
-		Log_print("POINT Command");
+		Log_println("POINT Command");
 	if (!Devices_GetIOCB())
 		return;
 	if (h_fp[h_iocb] != NULL) {
@@ -1396,7 +1396,7 @@ static int Devices_H_BinReadWord(void)
 		binf = NULL;
 		if (BINLOAD_start_binloading) {
 			BINLOAD_start_binloading = FALSE;
-			Log_print("binload: not valid BIN file");
+			Log_println("binload: not valid BIN file");
 			CPU_regY = 180; /* MyDOS: not a binary file */
 			CPU_SetN;
 			return -1;
@@ -1439,7 +1439,7 @@ static void Devices_H_BinLoaderCont(void)
 		to = (UWORD) temp;
 
 		if (devbug)
-			Log_print("H: Load: From %04X to %04X", from, to);
+			Log_println("H: Load: From %04X to %04X", from, to);
 
 		if (BINLOAD_start_binloading) {
 			if (runBinFile)
@@ -1483,7 +1483,7 @@ static void Devices_H_BinLoaderCont(void)
 
 static void Devices_H_LoadProceed(int mydos)
 {
-	/* Log_print("MyDOS %d, AX1 %d, AX2 %d", mydos, MEMORY_dGetByte(Devices_ICAX1Z), MEMORY_dGetByte(Devices_ICAX2Z)); */
+	/* Log_println("MyDOS %d, AX1 %d, AX2 %d", mydos, MEMORY_dGetByte(Devices_ICAX1Z), MEMORY_dGetByte(Devices_ICAX2Z)); */
 	if (mydos) {
 		switch (MEMORY_dGetByte(Devices_ICAX1Z) /* XXX: & 7 ? */) {
 		case 4:
@@ -1522,7 +1522,7 @@ static void Devices_H_Load(int mydos)
 	const char *p;
 	UBYTE buf[2];
 	if (devbug)
-		Log_print("LOAD Command");
+		Log_println("LOAD Command");
 	h_devnum = Devices_GetNumber(FALSE);
 	if (h_devnum < 0)
 		return;
@@ -1571,7 +1571,7 @@ static void Devices_H_Load(int mydos)
 	if (fread(buf, 1, 2, binf) != 2 || buf[0] != 0xff || buf[1] != 0xff) {
 		fclose(binf);
 		binf = NULL;
-		Log_print("H: load: not valid BIN file");
+		Log_println("H: load: not valid BIN file");
 		CPU_regY = 180;
 		CPU_SetN;
 		return;
@@ -1583,7 +1583,7 @@ static void Devices_H_Load(int mydos)
 static void Devices_H_FileLength(void)
 {
 	if (devbug)
-		Log_print("Get File Length Command");
+		Log_println("Get File Length Command");
 	if (!Devices_GetIOCB())
 		return;
 	/* if IOCB is closed then assume it is a MyDOS Load File command */
@@ -1629,7 +1629,7 @@ static void Devices_H_FileLength(void)
 static void Devices_H_MakeDirectory(void)
 {
 	if (devbug)
-		Log_print("MKDIR Command");
+		Log_println("MKDIR Command");
 	CHECK_READ_ONLY;
 
 	if (Devices_GetHostPath(FALSE) == 0)
@@ -1650,7 +1650,7 @@ static void Devices_H_MakeDirectory(void)
 static void Devices_H_RemoveDirectory(void)
 {
 	if (devbug)
-		Log_print("RMDIR Command");
+		Log_println("RMDIR Command");
 	CHECK_READ_ONLY;
 
 	if (Devices_GetHostPath(FALSE) == 0)
@@ -1667,7 +1667,7 @@ static void Devices_H_RemoveDirectory(void)
 static void Devices_H_ChangeDirectory(void)
 {
 	if (devbug)
-		Log_print("CD Command");
+		Log_println("CD Command");
 
 	if (Devices_GetHostPath(FALSE) == 0)
 		return;
@@ -1704,7 +1704,7 @@ static void Devices_H_DiskInfo(void)
 	int devnum;
 
 	if (devbug)
-		Log_print("Get Disk Information Command");
+		Log_println("Get Disk Information Command");
 
 	devnum = Devices_GetNumber(FALSE);
 	if (devnum < 0)
@@ -1724,7 +1724,7 @@ static void Devices_H_ToAbsolutePath(void)
 	const char *p;
 
 	if (devbug)
-		Log_print("To Absolute Path Command");
+		Log_println("To Absolute Path Command");
 
 	if (Devices_GetHostPath(FALSE) == 0)
 		return;
@@ -1761,7 +1761,7 @@ static void Devices_H_ToAbsolutePath(void)
 static void Devices_H_Special(void)
 {
 	if (devbug)
-		Log_print("HHSPEC");
+		Log_println("HHSPEC");
 
 	switch (MEMORY_dGetByte(Devices_ICCOMZ)) {
 #ifdef DO_RENAME
@@ -1817,11 +1817,11 @@ static void Devices_H_Special(void)
 		return;
 	case 0xfe:
 		if (devbug)
-			Log_print("FORMAT Command");
+			Log_println("FORMAT Command");
 		break;
 	default:
 		if (devbug)
-			Log_print("UNKNOWN Command %02X", MEMORY_dGetByte(Devices_ICCOMZ));
+			Log_println("UNKNOWN Command %02X", MEMORY_dGetByte(Devices_ICCOMZ));
 		break;
 	}
 
@@ -1862,7 +1862,7 @@ static char spool_file[FILENAME_MAX];
 static void Devices_P_Close(void)
 {
 	if (devbug)
-		Log_print("PHCLOS");
+		Log_println("PHCLOS");
 
 	if (phf != NULL) {
 		fclose(phf);
@@ -1876,7 +1876,7 @@ static void Devices_P_Close(void)
 			int retval;
 			sprintf(command, Devices_print_command, spool_file);
 			if ((retval = system(command)) == -1)
-				Log_print("Print command \"%s\' failed", command);
+				Log_println("Print command \"%s\' failed", command);
 #if defined(HAVE_UTIL_UNLINK) && !defined(VMS) && !defined(MACOSX)
 			if (Util_unlink(spool_file) != 0) {
 				perror(spool_file);
@@ -1891,7 +1891,7 @@ static void Devices_P_Close(void)
 static void Devices_P_Open(void)
 {
 	if (devbug)
-		Log_print("PHOPEN");
+		Log_println("PHOPEN");
 
 	if (phf != NULL)
 		Devices_P_Close();
@@ -1912,7 +1912,7 @@ static void Devices_P_Write(void)
 	UBYTE byte;
 
 	if (devbug)
-		Log_print("PHWRIT");
+		Log_println("PHWRIT");
 
 	byte = CPU_regA;
 	if (byte == 0x9b)
@@ -1926,13 +1926,13 @@ static void Devices_P_Write(void)
 static void Devices_P_Status(void)
 {
 	if (devbug)
-		Log_print("PHSTAT");
+		Log_println("PHSTAT");
 }
 
 static void Devices_P_Init(void)
 {
 	if (devbug)
-		Log_print("PHINIT");
+		Log_println("PHINIT");
 
 	if (phf != NULL) {
 		fclose(phf);
@@ -2048,7 +2048,7 @@ struct DEV_B dev_b_status;
 static void Devices_B_Open(void)
 {
 	if (devbug)
-		Log_print("B: OPEN");
+		Log_println("B: OPEN");
 
 	if (MEMORY_dGetByte(Devices_ICAX1Z) != 8) {
 		CPU_regY = 163; /* read-only device */
@@ -2067,7 +2067,7 @@ static void Devices_B_Open(void)
 static void Devices_B_Close(void)
 {
 	if (devbug)
-		Log_print("B: CLOSE (%s)", dev_b_status.url);
+		Log_println("B: CLOSE (%s)", dev_b_status.url);
 
 	if (dev_b_status.pos > 0)
 		dev_b_status.ready = TRUE;
@@ -2083,7 +2083,7 @@ static void Devices_B_Write(void)
 	byte = CPU_regA;
 
 	if (devbug)
-		Log_print("B: WRITE ([%d] %02X, '%c')", dev_b_status.pos, byte, byte);
+		Log_println("B: WRITE ([%d] %02X, '%c')", dev_b_status.pos, byte, byte);
 
 	if (byte == 0x9b)
 		byte = '\0';
@@ -2102,13 +2102,13 @@ static void Devices_B_Write(void)
 static void Devices_B_Null(void)
 {
 	if (devbug)
-		Log_print("B: NULL");
+		Log_println("B: NULL");
 }
 
 static void Devices_B_Read(void)
 {
 	if (devbug)
-		Log_print("B: READ");
+		Log_println("B: READ");
 
 	CPU_regY = 136; /* end of file */
 	CPU_SetN;
@@ -2117,7 +2117,7 @@ static void Devices_B_Read(void)
 static void Devices_B_Init(void)
 {
 	if (devbug)
-		Log_print("B: INIT");
+		Log_println("B: INIT");
 
 	CPU_regY = 1;
 	CPU_ClrN;

@@ -67,7 +67,7 @@ static void init_bb(void)
 	bb_rom_size = Util_flen(bbfp);
 	fclose(bbfp);
 	if (bb_rom_size != 0x10000 && bb_rom_size != 0x4000) {
-		Log_print("Invalid black box rom size\n");
+		Log_println("Invalid black box rom size\n");
 		return;
 	}
 	free(bb_rom);
@@ -83,7 +83,7 @@ static void init_bb(void)
 	if (!Util_filenamenotset(bb_scsi_disk_filename)) {
 		PBI_SCSI_disk = fopen(bb_scsi_disk_filename, "rb+");
 		if (PBI_SCSI_disk == NULL) {
-			Log_print("Error opening BB SCSI disk image:%s", bb_scsi_disk_filename);
+			Log_println("Error opening BB SCSI disk image:%s", bb_scsi_disk_filename);
 		}
 		else {
 			D(printf("Opened BB SCSI disk image\n"));
@@ -107,7 +107,7 @@ int PBI_BB_Initialise(int *argc, char *argv[])
 		}
 		else {
 		 	if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-bb              Emulate the CSS Black Box");
+				Log_println("\t-bb              Emulate the CSS Black Box");
 			}
 			argv[j++] = argv[i];
 		}

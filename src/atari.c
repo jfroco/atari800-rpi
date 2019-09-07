@@ -270,13 +270,13 @@ int Atari800_LoadImage(const char *filename, UBYTE *buffer, int nbytes)
 
 	f = fopen(filename, "rb");
 	if (f == NULL) {
-		Log_print("Error loading ROM image: %s", filename);
+		Log_println("Error loading ROM image: %s", filename);
 		return FALSE;
 	}
 	len = fread(buffer, 1, nbytes, f);
 	fclose(f);
 	if (len != nbytes) {
-		Log_print("Error reading %s", filename);
+		Log_println("Error reading %s", filename);
 		return FALSE;
 	}
 	return TRUE;
@@ -393,7 +393,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 				if (i + 1 < *argc)
 					rtconfig_filename = argv[++i];
 				else {
-					Log_print("Missing argument for '%s'", argv[i]);
+					Log_println("Missing argument for '%s'", argv[i]);
 					return FALSE;
 				}
 			}
@@ -594,7 +594,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 					int total_ram = Util_sscandec(argv[++i]);
 					MEMORY_mosaic_num_banks = (total_ram - 48)/4;
 					if ((total_ram - 48) % 4 != 0 || MEMORY_mosaic_num_banks >= 0x40 || MEMORY_mosaic_num_banks < 0) {
-						Log_print("Invalid Mosaic total RAM size");
+						Log_println("Invalid Mosaic total RAM size");
 						return FALSE;
 					}
 				}
@@ -605,7 +605,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 					int total_ram = Util_sscandec(argv[++i]);
 					MEMORY_axlon_num_banks = ((total_ram) - 32) / 16;
 					if ((total_ram - 32) % 16 != 0 || (MEMORY_axlon_num_banks != 0 && MEMORY_axlon_num_banks != 8 && MEMORY_axlon_num_banks != 16 && MEMORY_axlon_num_banks != 32 && MEMORY_axlon_num_banks != 64 && MEMORY_axlon_num_banks != 128 && MEMORY_axlon_num_banks != 256)) {
-						Log_print("Invalid Axlon total RAM size");
+						Log_println("Invalid Axlon total RAM size");
 						return FALSE;
 					}
 				}
@@ -628,7 +628,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 				if (i_a) {
 					Atari800_refresh_rate = Util_sscandec(argv[++i]);
 					if (Atari800_refresh_rate < 1) {
-						Log_print("Invalid refresh rate, using 1");
+						Log_println("Invalid refresh rate, using 1");
 						Atari800_refresh_rate = 1;
 					}
 				}
@@ -646,41 +646,41 @@ int Atari800_Initialise(int *argc, char *argv[])
 				if (strcmp(argv[i], "-help") == 0) {
 #ifndef __PLUS
 					help_only = TRUE;
-					Log_print("\t-config <file>   Specify alternate configuration file");
+					Log_println("\t-config <file>   Specify alternate configuration file");
 #endif
-					Log_print("\t-autosave-config Automatically save configuration on emulator exit");
-					Log_print("\t-no-autosave-config");
-					Log_print("\t                 Disable automatic saving of configuration");
-					Log_print("\t-atari           Emulate Atari 800");
-					Log_print("\t-1200            Emulate Atari 1200XL");
-					Log_print("\t-xl              Emulate Atari 800XL");
-					Log_print("\t-xe              Emulate Atari 130XE");
-					Log_print("\t-320xe           Emulate Atari 320XE (Compy-Shop)");
-					Log_print("\t-rambo           Emulate Atari 320XE (Rambo XL)");
-					Log_print("\t-xegs            Emulate Atari XEGS");
-					Log_print("\t-5200            Emulate Atari 5200 Games System");
-					Log_print("\t-nobasic         Turn off Atari BASIC ROM");
-					Log_print("\t-basic           Turn on Atari BASIC ROM");
-					Log_print("\t-pal             Enable PAL TV mode");
-					Log_print("\t-ntsc            Enable NTSC TV mode");
-					Log_print("\t-run <file>      Run Atari program (COM, EXE, XEX, BAS, LST)");
+					Log_println("\t-autosave-config Automatically save configuration on emulator exit");
+					Log_println("\t-no-autosave-config");
+					Log_println("\t                 Disable automatic saving of configuration");
+					Log_println("\t-atari           Emulate Atari 800");
+					Log_println("\t-1200            Emulate Atari 1200XL");
+					Log_println("\t-xl              Emulate Atari 800XL");
+					Log_println("\t-xe              Emulate Atari 130XE");
+					Log_println("\t-320xe           Emulate Atari 320XE (Compy-Shop)");
+					Log_println("\t-rambo           Emulate Atari 320XE (Rambo XL)");
+					Log_println("\t-xegs            Emulate Atari XEGS");
+					Log_println("\t-5200            Emulate Atari 5200 Games System");
+					Log_println("\t-nobasic         Turn off Atari BASIC ROM");
+					Log_println("\t-basic           Turn on Atari BASIC ROM");
+					Log_println("\t-pal             Enable PAL TV mode");
+					Log_println("\t-ntsc            Enable NTSC TV mode");
+					Log_println("\t-run <file>      Run Atari program (COM, EXE, XEX, BAS, LST)");
 #ifndef BASIC
-					Log_print("\t-state <file>    Load saved-state file");
-					Log_print("\t-refresh <rate>  Specify screen refresh rate");
+					Log_println("\t-state <file>    Load saved-state file");
+					Log_println("\t-refresh <rate>  Specify screen refresh rate");
 #endif
-					Log_print("\t-nopatch         Don't patch SIO routine in OS");
-					Log_print("\t-nopatchall      Don't patch OS at all, H: device won't work");
-					Log_print("\t-c               Enable RAM between 0xc000 and 0xcfff in Atari 800");
-					Log_print("\t-axlon <n>       Use Atari 800 Axlon memory expansion: <n> k total RAM");
-					Log_print("\t-axlon0f         Use Axlon shadow at 0x0fc0-0x0fff");
-					Log_print("\t-mosaic <n>      Use 400/800 Mosaic memory expansion: <n> k total RAM");
-					Log_print("\t-mapram          Enable MapRAM for Atari XL/XE");
-					Log_print("\t-no-mapram       Disable MapRAM");
+					Log_println("\t-nopatch         Don't patch SIO routine in OS");
+					Log_println("\t-nopatchall      Don't patch OS at all, H: device won't work");
+					Log_println("\t-c               Enable RAM between 0xc000 and 0xcfff in Atari 800");
+					Log_println("\t-axlon <n>       Use Atari 800 Axlon memory expansion: <n> k total RAM");
+					Log_println("\t-axlon0f         Use Axlon shadow at 0x0fc0-0x0fff");
+					Log_println("\t-mosaic <n>      Use 400/800 Mosaic memory expansion: <n> k total RAM");
+					Log_println("\t-mapram          Enable MapRAM for Atari XL/XE");
+					Log_println("\t-no-mapram       Disable MapRAM");
 #ifdef R_IO_DEVICE
-					Log_print("\t-rdevice [<dev>] Enable R: emulation (using serial device <dev>)");
+					Log_println("\t-rdevice [<dev>] Enable R: emulation (using serial device <dev>)");
 #endif
-					Log_print("\t-turbo           Run emulated Atari as fast as possible");
-					Log_print("\t-v               Show version/release number");
+					Log_println("\t-turbo           Run emulated Atari as fast as possible");
+					Log_println("\t-v               Show version/release number");
 				}
 
 				/* copy this option for platform/module specific evaluation */
@@ -695,7 +695,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 		}
 	}
 	if (MEMORY_mosaic_num_banks > 0 && MEMORY_axlon_num_banks > 0) {
-		Log_print("Axlon and Mosaic RAM can not both be enabled, because they are incompatible");
+		Log_println("Axlon and Mosaic RAM can not both be enabled, because they are incompatible");
 		return FALSE;
 	}
 
@@ -795,12 +795,12 @@ int Atari800_Initialise(int *argc, char *argv[])
 	for (i = 1; i < *argc; i++) {
 		if (j > 8) {
 			/* The remaining arguments are not necessary disk images, but ignore them... */
-			Log_print("Too many disk image filenames on the command line (max. 8).");
+			Log_println("Too many disk image filenames on the command line (max. 8).");
 			break;
 		}
 		switch (AFILE_OpenFile(argv[i], i == 1, j, FALSE)) {
 			case AFILE_ERROR:
-				Log_print("Error opening \"%s\"", argv[i]);
+				Log_println("Error opening \"%s\"", argv[i]);
 				break;
 			case AFILE_ATR:
 			case AFILE_XFD:
@@ -818,7 +818,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 	/* Install requested ROM cartridge */
 	if (CARTRIDGE_main.type == CARTRIDGE_UNKNOWN) {
 #ifdef BASIC
-		Log_print("Raw cartridge images not supported in BASIC version!");
+		Log_println("Raw cartridge images not supported in BASIC version!");
 #else /* BASIC */
 		UI_is_active = TRUE;
 		CARTRIDGE_SetType(&CARTRIDGE_main, UI_SelectCartType(CARTRIDGE_main.size));
@@ -829,7 +829,7 @@ int Atari800_Initialise(int *argc, char *argv[])
 	/* Install requested second ROM cartridge, if first is SpartaX */
 	if (CARTRIDGE_piggyback.type == CARTRIDGE_UNKNOWN) {
 #ifdef BASIC
-		Log_print("Raw cartridge images not supported in BASIC version!");
+		Log_println("Raw cartridge images not supported in BASIC version!");
 #else /* BASIC */
 		UI_is_active = TRUE;
 		CARTRIDGE_SetType(&CARTRIDGE_piggyback, UI_SelectCartType(CARTRIDGE_piggyback.size));
@@ -1363,7 +1363,7 @@ void Atari800_StateRead(UBYTE version)
 		StateSav_ReadUBYTE(&temp, 1);
 		if (temp < 0 || temp >= Atari800_MACHINE_SIZE) {
 			temp = Atari800_MACHINE_XLXE;
-			Log_print("Warning: Bad machine type read in from state save, defaulting to XL/XE");
+			Log_println("Warning: Bad machine type read in from state save, defaulting to XL/XE");
 		}
 		Atari800_SetMachineType(temp);
 		if (Atari800_machine_type == Atari800_MACHINE_XLXE) {
@@ -1442,7 +1442,7 @@ void Atari800_StateRead(UBYTE version)
 		default:
 			Atari800_machine_type = Atari800_MACHINE_XLXE;
 			MEMORY_ram_size = 64;
-			Log_print("Warning: Bad machine type read in from state save, defaulting to 800 XL");
+			Log_println("Warning: Bad machine type read in from state save, defaulting to 800 XL");
 			break;
 		}
 

@@ -208,7 +208,7 @@ static void ide_reset(struct ide_device *s) {
 
 static int ide_init_drive(struct ide_device *s, char *filename) {
     if (!(s->file = fopen(filename, "rb+"))) {
-        Log_print("%s: %s", filename, strerror(errno));
+        Log_println("%s: %s", filename, strerror(errno));
         return FALSE;
     }
 
@@ -233,7 +233,7 @@ static int ide_init_drive(struct ide_device *s, char *filename) {
     if (s->cylinders > 16383)
         s->cylinders = 16383;
     else if (s->cylinders < 2) {
-        Log_print("%s: image file too small\n", filename);
+        Log_println("%s: image file too small\n", filename);
         fclose(s->file);
         return FALSE;
     }
@@ -874,7 +874,7 @@ int IDE_Initialise(int *argc, char *argv[]) {
 
         if (!strcmp(argv[i], "-ide"  )) {
             if (!available) {
-                Log_print("Missing argument for '%s'", argv[i]);
+                Log_println("Missing argument for '%s'", argv[i]);
                 return FALSE;
             }
             filename = Util_strdup(argv[++i]);
@@ -884,9 +884,9 @@ int IDE_Initialise(int *argc, char *argv[]) {
             device.is_cf = 1;
         } else {
              if (!strcmp(argv[i], "-help")) {
-                 Log_print("\t-ide <file>      Enable IDE emulation");
-                 Log_print("\t-ide_debug       Enable IDE Debug Output");
-                 Log_print("\t-ide_cf          Enable CF emulation");
+                 Log_println("\t-ide <file>      Enable IDE emulation");
+                 Log_println("\t-ide_debug       Enable IDE Debug Output");
+                 Log_println("\t-ide_cf          Enable CF emulation");
              }
              argv[j++] = argv[i];
         }
