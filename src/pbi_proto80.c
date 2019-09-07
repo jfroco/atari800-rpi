@@ -50,12 +50,12 @@ int PBI_PROTO80_Initialise(int *argc, char *argv[])
 	int i, j;
 	for (i = j = 1; i < *argc; i++) {
 		if (strcmp(argv[i], "-proto80") == 0) {
-			Log_print("proto80 enabled");
+			Log_println("proto80 enabled");
 			PBI_PROTO80_enabled = TRUE;
 		}
 		else {
 		 	if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-proto80         Emulate a prototype 80 column board for the 1090");
+				Log_println("\t-proto80         Emulate a prototype 80 column board for the 1090");
 			}
 			argv[j++] = argv[i];
 		}
@@ -67,11 +67,11 @@ int PBI_PROTO80_Initialise(int *argc, char *argv[])
 		if (!Atari800_LoadImage(proto80_rom_filename, proto80rom, 0x800)) {
 			free(proto80rom);
 			PBI_PROTO80_enabled = FALSE;
-			Log_print("Couldn't load proto80 rom image");
+			Log_println("Couldn't load proto80 rom image");
 			return FALSE;
 		}
 		else {
-			Log_print("loaded proto80 rom image");
+			Log_println("loaded proto80 rom image");
 			PBI_D6D7ram = TRUE;
 		}
 	}

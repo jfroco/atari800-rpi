@@ -121,7 +121,7 @@ static void UpdateModeDependentPointers(int tv_mode)
 	}
 	else {
 		Atari800_ErrExit();
-		Log_print("Interal error: Invalid Atari800_tv_mode\n");
+		Log_println("Interal error: Invalid Atari800_tv_mode\n");
 		exit(1);
 	}
 }
@@ -292,7 +292,7 @@ int Colours_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				int idx = CFG_MatchTextParameter(argv[++i], preset_cfg_strings, COLOURS_PRESET_SIZE);
 				if (idx < 0) {
-					Log_print("Invalid value for -colors-preset");
+					Log_println("Invalid value for -colors-preset");
 					return FALSE;
 				}
 				COLOURS_NTSC_setup = COLOURS_PAL_setup = presets[idx];
@@ -303,19 +303,19 @@ int Colours_Initialise(int *argc, char *argv[])
 
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-colors-preset standard|deep-black|vibrant");
-				Log_print("\t                       Use one of predefined color adjustments");
-				Log_print("\t-saturation <num>      Set color saturation");
-				Log_print("\t-contrast <num>        Set contrast");
-				Log_print("\t-brightness <num>      Set brightness");
-				Log_print("\t-gamma <num>           Set color gamma factor");
-				Log_print("\t-tint <num>            Set tint");
+				Log_println("\t-colors-preset standard|deep-black|vibrant");
+				Log_println("\t                       Use one of predefined color adjustments");
+				Log_println("\t-saturation <num>      Set color saturation");
+				Log_println("\t-contrast <num>        Set contrast");
+				Log_println("\t-brightness <num>      Set brightness");
+				Log_println("\t-gamma <num>           Set color gamma factor");
+				Log_println("\t-tint <num>            Set tint");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}

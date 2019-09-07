@@ -177,7 +177,7 @@ int INPUT_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				INPUT_mouse_port = Util_sscandec(argv[++i]) - 1;
 				if (INPUT_mouse_port < 0 || INPUT_mouse_port > 3) {
-					Log_print("Invalid mouse port number - should be between 0 and 3");
+					Log_println("Invalid mouse port number - should be between 0 and 3");
 					return FALSE;
 				}
 			}
@@ -187,7 +187,7 @@ int INPUT_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				INPUT_mouse_speed = Util_sscandec(argv[++i]);
 				if (INPUT_mouse_speed < 1 || INPUT_mouse_speed > 9) {
-					Log_print("Invalid mouse speed - should be between 1 and 9");
+					Log_println("Invalid mouse speed - should be between 1 and 9");
 					return FALSE;
 				}
 			}
@@ -201,7 +201,7 @@ int INPUT_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				char *recfilename = argv[++i];
 				if ((recordfp = gzopen(recfilename, "wb")) == NULL) {
-					Log_print("Cannot open record file");
+					Log_println("Cannot open record file");
 					return FALSE;
 				}
 				else {
@@ -215,20 +215,20 @@ int INPUT_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				char *pbfilename = argv[++i];
 				if ((playbackfp = gzopen(pbfilename, "rb")) == NULL) {
-					Log_print("Cannot open playback file");
+					Log_println("Cannot open playback file");
 					return FALSE;
 				}
 				else {
 					playingback = TRUE;
 					gzgets(playbackfp, gzbuf, GZBUFSIZE);
 					if (sscanf(gzbuf, "Atari800 event recording, version: %d\n", &recording_version) != 1) {
-						Log_print("Invalid playback file");
+						Log_println("Invalid playback file");
 						playingback = FALSE;
 						gzclose(playbackfp);
 						return FALSE;
 					}
 					else if (recording_version > EVENT_RECORDING_VERSION) {
-						Log_print("Newer version of playback file than this version of Atari800 can handle");
+						Log_println("Newer version of playback file than this version of Atari800 can handle");
 						playingback = FALSE;
 						gzclose(playbackfp);
 						return FALSE;
@@ -246,7 +246,7 @@ int INPUT_Initialise(int *argc, char *argv[])
 				INPUT_cx85 = 1;
 				cx85_port = Util_sscandec(argv[++i]) - 1;
 				if (cx85_port < 0 || cx85_port > 3) {
-					Log_print("Invalid cx85 port - should be between 0 and 3");
+					Log_println("Invalid cx85 port - should be between 0 and 3");
 					return FALSE;
 				}
 			}
@@ -254,30 +254,30 @@ int INPUT_Initialise(int *argc, char *argv[])
 		}
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-mouse off       Do not use mouse");
-				Log_print("\t-mouse pad       Emulate paddles");
-				Log_print("\t-mouse touch     Emulate Atari Touch Tablet");
-				Log_print("\t-mouse koala     Emulate Koala Pad");
-				Log_print("\t-mouse pen       Emulate Light Pen");
-				Log_print("\t-mouse gun       Emulate Light Gun");
-				Log_print("\t-mouse amiga     Emulate Amiga mouse");
-				Log_print("\t-mouse st        Emulate Atari ST mouse");
-				Log_print("\t-mouse trak      Emulate Atari Trak-Ball");
-				Log_print("\t-mouse joy       Emulate joystick using mouse");
-				Log_print("\t-mouseport <n>   Set mouse port 1-4 (default 1)");
-				Log_print("\t-mousespeed <n>  Set mouse speed 1-9 (default 3)");
-				Log_print("\t-directmouse     Use absolute X/Y mouse coords");
-				Log_print("\t-cx85 <n>        Emulate CX85 numeric keypad on port <n>");
-				Log_print("\t-multijoy        Emulate MultiJoy4 interface");
-				Log_print("\t-record <file>   Record input to <file>");
-				Log_print("\t-playback <file> Playback input from <file>");
+				Log_println("\t-mouse off       Do not use mouse");
+				Log_println("\t-mouse pad       Emulate paddles");
+				Log_println("\t-mouse touch     Emulate Atari Touch Tablet");
+				Log_println("\t-mouse koala     Emulate Koala Pad");
+				Log_println("\t-mouse pen       Emulate Light Pen");
+				Log_println("\t-mouse gun       Emulate Light Gun");
+				Log_println("\t-mouse amiga     Emulate Amiga mouse");
+				Log_println("\t-mouse st        Emulate Atari ST mouse");
+				Log_println("\t-mouse trak      Emulate Atari Trak-Ball");
+				Log_println("\t-mouse joy       Emulate joystick using mouse");
+				Log_println("\t-mouseport <n>   Set mouse port 1-4 (default 1)");
+				Log_println("\t-mousespeed <n>  Set mouse speed 1-9 (default 3)");
+				Log_println("\t-directmouse     Use absolute X/Y mouse coords");
+				Log_println("\t-cx85 <n>        Emulate CX85 numeric keypad on port <n>");
+				Log_println("\t-multijoy        Emulate MultiJoy4 interface");
+				Log_println("\t-record <file>   Record input to <file>");
+				Log_println("\t-playback <file> Playback input from <file>");
 			}
 			argv[j++] = argv[i];
 		}
 
 		/* this is the end of the additional argument check */
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -286,7 +286,7 @@ int INPUT_Initialise(int *argc, char *argv[])
 				INPUT_mouse_mode == INPUT_MOUSE_PAD ||
 				INPUT_mouse_mode == INPUT_MOUSE_TOUCH ||
 				INPUT_mouse_mode == INPUT_MOUSE_KOALA)) {
-		Log_print("-directmouse only valid with -mouse pad|touch|koala");
+		Log_println("-directmouse only valid with -mouse pad|touch|koala");
 		return FALSE;
 	}
 
@@ -892,7 +892,7 @@ static void update_adler32_of_screen(void)
 		gzgets(playbackfp, gzbuf, GZBUFSIZE);
 		sscanf(gzbuf, "%08X ", &pb_adler32val);
 		if (pb_adler32val != adler32val){
-			Log_print("adler32 does not match");
+			Log_println("adler32 does not match");
 			adler32_errors++;
 		}
 		

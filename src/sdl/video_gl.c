@@ -185,7 +185,7 @@ static void (*GetGlFunc(const char* s))(void)
 {
 	void(*f)(void) = SDL_GL_GetProcAddress(s);
 	if (f == NULL)
-		Log_print("Unable to get function pointer for %s\n",s);
+		Log_println("Unable to get function pointer for %s\n",s);
 	return f;
 }
 
@@ -505,7 +505,7 @@ static int InitGlPbo(void)
 static void ModeInfo(void)
 {
 	char *fullstring = (SDL_VIDEO_screen->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN ? "fullscreen" : "windowed";
-	Log_print("Video Mode: %dx%dx%d %s, pixel format: %s", SDL_VIDEO_screen->w, SDL_VIDEO_screen->h,
+	Log_println("Video Mode: %dx%dx%d %s, pixel format: %s", SDL_VIDEO_screen->w, SDL_VIDEO_screen->h,
 		   SDL_VIDEO_screen->format->BitsPerPixel, fullstring, pixel_format_cfg_strings[SDL_VIDEO_GL_pixel_format]);
 }
 
@@ -519,12 +519,12 @@ static int SetVideoMode(int w, int h, int windowed)
 	SDL_VIDEO_screen = SDL_SetVideoMode(w, h, SDL_VIDEO_native_bpp, flags);
 	if (SDL_VIDEO_screen == NULL) {
 		/* Some SDL_SetVideoMode errors can be averted by reinitialising the SDL video subsystem. */
-		Log_print("Setting video mode: %dx%dx%d failed: %s. Reinitialising video.", w, h, SDL_VIDEO_native_bpp, SDL_GetError());
+		Log_println("Setting video mode: %dx%dx%d failed: %s. Reinitialising video.", w, h, SDL_VIDEO_native_bpp, SDL_GetError());
 		SDL_VIDEO_ReinitSDL();
 		reinit = TRUE;
 		SDL_VIDEO_screen = SDL_SetVideoMode(w, h, SDL_VIDEO_native_bpp, flags);
 		if (SDL_VIDEO_screen == NULL) {
-			Log_print("Setting Video Mode: %dx%dx%d failed: %s", w, h, SDL_VIDEO_native_bpp, SDL_GetError());
+			Log_println("Setting Video Mode: %dx%dx%d failed: %s", w, h, SDL_VIDEO_native_bpp, SDL_GetError());
 			Log_flushlog();
 			exit(-1);
 		}
@@ -561,14 +561,14 @@ int SDL_VIDEO_GL_SetVideoMode(VIDEOMODE_resolution_t const *res, int windowed, V
 			/* Reinitialisation happened! Need to recreate GL context. */
 			new = TRUE;
 		if (!InitGlFunctions()) {
-			Log_print("Cannot use OpenGL - some functions are not provided.");
+			Log_println("Cannot use OpenGL - some functions are not provided.");
 			return FALSE;
 		}
 		if (new) {
 			GLint tex_size;
 			gl.GetIntegerv(GL_MAX_TEXTURE_SIZE, & tex_size);
 			if (tex_size < 1024) {
-				Log_print("Cannot use OpenGL - Supported texture size is too small (%d).", tex_size);
+				Log_println("Cannot use OpenGL - Supported texture size is too small (%d).", tex_size);
 				return FALSE;
 			}
 		}
@@ -576,11 +576,11 @@ int SDL_VIDEO_GL_SetVideoMode(VIDEOMODE_resolution_t const *res, int windowed, V
 		if (!pbo_available)
 			SDL_VIDEO_GL_pbo = FALSE;
 		if (new) {
-			Log_print("OpenGL initialized successfully. Version: %s", gl.GetString(GL_VERSION));
+			Log_println("OpenGL initialized successfully. Version: %s", gl.GetString(GL_VERSION));
 			if (pbo_available)
-				Log_print("OpenGL Pixel Buffer Objects available.");
+				Log_println("OpenGL Pixel Buffer Objects available.");
 			else
-			Log_print("OpenGL Pixel Buffer Objects not available.");
+			Log_println("OpenGL Pixel Buffer Objects not available.");
 		}
 		InitGlContext();
 		context_updated = TRUE;
@@ -762,11 +762,11 @@ void SDL_VIDEO_GL_WriteConfig(FILE *fp)
 static int InitGlLibrary(void)
 {
 	if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0) {
-		Log_print("Cannot use OpenGL - unable to set GL attribute: %s\n",SDL_GetError());
+		Log_println("Cannot use OpenGL - unable to set GL attribute: %s\n",SDL_GetError());
 		return FALSE;
 	}
 	if (SDL_GL_LoadLibrary(library_path) < 0) {
-		Log_print("Cannot use OpenGL - unable to dynamically open OpenGL library: %s\n",SDL_GetError());
+		Log_println("Cannot use OpenGL - unable to dynamically open OpenGL library: %s\n",SDL_GetError());
 		return FALSE;
 	}
 	return TRUE;
@@ -810,21 +810,21 @@ int SDL_VIDEO_GL_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-pixel-format bgr16|rgb16|bgra32|argb32");
-				Log_print("\t                     Set internal pixel format (affects performance)");
-				Log_print("\t-bilinear-filter     Enable OpenGL bilinear filtering");
-				Log_print("\t-no-bilinear-filter  Disable OpenGL bilinear filtering");
-				Log_print("\t-pbo                 Use OpenGL Pixel Buffer Objects if available");
-				Log_print("\t-no-pbo              Don't use OpenGL Pixel Buffer Objects");
-				Log_print("\t-opengl-lib <path>   Use a custom OpenGL shared library");
+				Log_println("\t-pixel-format bgr16|rgb16|bgra32|argb32");
+				Log_println("\t                     Set internal pixel format (affects performance)");
+				Log_println("\t-bilinear-filter     Enable OpenGL bilinear filtering");
+				Log_println("\t-no-bilinear-filter  Disable OpenGL bilinear filtering");
+				Log_println("\t-pbo                 Use OpenGL Pixel Buffer Objects if available");
+				Log_println("\t-no-pbo              Don't use OpenGL Pixel Buffer Objects");
+				Log_println("\t-opengl-lib <path>   Use a custom OpenGL shared library");
 			}
 			argv[j++] = argv[i];
 		}
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		} else if (a_i) {
-			Log_print("Invalid argument for '%s'", argv[--i]);
+			Log_println("Invalid argument for '%s'", argv[--i]);
 			return FALSE;
 		}
 	}

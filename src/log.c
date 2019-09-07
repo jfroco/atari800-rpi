@@ -28,59 +28,68 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <stdbool.h>
 #ifdef ANDROID
 #include <android/log.h>
 #endif
 
 #include "log.h"
 
-#ifdef MACOSX
-#  define PRINT(a) ControlManagerMessagePrint(a)
-#elif defined(ANDROID)
-#  define PRINT(a) __android_log_write(ANDROID_LOG_DEBUG, "A800Core", a)
-#else
-#  define PRINT(a) printf("%s", a)
-#endif
+char *LOG_FILE_PATH;
+bool LOG_DEBUG_SDL_BUTTONS = 0;
+FILE *LOG_FP = 0;
 
-#ifdef BUFFERED_LOG
-char Log_buffer[Log_BUFFER_SIZE];
-#endif
+int Log_ReadConfig(char string[], char *ptr) {
+	if (strcmp(string, "LOG_DEBUG_SDL_BUTTONS") == 0) {
+		if (strcmp("1", ptr) == 0) {
+			LOG_DEBUG_SDL_BUTTONS = 1;
+			return 1;
+		}
+	}
+	if (strcmp(string, "LOGFILE") == 0) {
+		LOG_FILE_PATH = strdup(ptr);
+		Log_println("Opening logfile %s.\n", LOG_FILE_PATH);
+ 		LOG_FP = fopen(LOG_FILE_PATH, "w");
+		Log_println("Logfile %s opened for writing.\n", LOG_FILE_PATH);
+		return 1;
+	}
+	return 0;
+}
 
-void Log_print(char *format, ...)
-{
+void Log_WriteConfig(FILE *fp) {
+	fprintf(fp, "LOGFILE=%s\n", LOG_FILE_PATH);
+	fprintf(fp, "LOG_DEBUG_SDL_BUTTONS=%d\n", LOG_DEBUG_SDL_BUTTONS);
+}
+
+void Log_print(char *format, ...) {
 	va_list args;
-	char buffer[8192];
-
 	va_start(args, format);
-#ifdef HAVE_VSNPRINTF
-	vsnprintf(buffer, sizeof(buffer) - 2 /* -2 for the strcat() */, format, args);
-#else
-	vsprintf(buffer, format, args);
-#endif
+	if (LOG_FP) {
+		vfprintf(LOG_FP, format, args);
+	} else {
+		vfprintf(stdout, format, args);
+	}
+	Log_flushlog();
 	va_end(args);
+}
 
-#ifdef __PLUS
-	strcat(buffer, "\r\n");
-#else
-	strcat(buffer, "\n");
-#endif
-
-#ifdef BUFFERED_LOG
-	if ((strlen(Log_buffer) + strlen(buffer) + 1) > Log_BUFFER_SIZE)
-		*Log_buffer = 0;
-
-	strcat(Log_buffer, buffer);
-#else
-	PRINT(buffer);
-#endif
+void Log_println(char *format, ...) {
+	va_list args;
+	va_start(args, format);
+	if (LOG_FP) {
+		vfprintf(LOG_FP, format, args);
+		fprintf(LOG_FP, "\n");
+	} else {
+		vfprintf(stdout, format, args);
+		fprintf(stdout, "\n");
+	}
+	Log_flushlog();
+	va_end(args);
 }
 
 void Log_flushlog(void)
 {
-#ifdef BUFFERED_LOG
-	if (*Log_buffer) {
-		PRINT(Log_buffer);
-		*Log_buffer = 0;
+	if (LOG_FP) {
+		fflush(LOG_FP);
 	}
-#endif
 }

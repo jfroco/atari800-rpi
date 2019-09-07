@@ -168,24 +168,24 @@ int Sound_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-sound               Enable sound");
-				Log_print("\t-nosound             Disable sound");
-				Log_print("\t-dsprate <rate>      Set sound output frequency in Hz");
-				Log_print("\t-audio16             Set sound output format to 16-bit");
-				Log_print("\t-audio8              Set sound output format to 8-bit");
-				Log_print("\t-snd-fragsize <num>  Set size of the hardware sound buffer (fragment size)");
+				Log_println("\t-sound               Enable sound");
+				Log_println("\t-nosound             Disable sound");
+				Log_println("\t-dsprate <rate>      Set sound output frequency in Hz");
+				Log_println("\t-audio16             Set sound output format to 16-bit");
+				Log_println("\t-audio8              Set sound output format to 8-bit");
+				Log_println("\t-snd-fragsize <num>  Set size of the hardware sound buffer (fragment size)");
 #ifdef SYNCHRONIZED_SOUND
-				Log_print("\t-snddelay <time>       Set sound latency in milliseconds");
+				Log_println("\t-snddelay <time>       Set sound latency in milliseconds");
 #endif /* SYNCHRONIZED_SOUND */
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		} else if (a_i) {
-			Log_print("Invalid argument for '%s'", argv[--i]);
+			Log_println("Invalid argument for '%s'", argv[--i]);
 			return FALSE;
 		}
 	}
@@ -233,12 +233,12 @@ int Sound_Setup(void)
 	/* Now setup contains actual audio output settings. */
 	if ((POKEYSND_enable_new_pokey && Sound_out.freq < 8192)
 		|| Sound_out.freq < 1000 || Sound_out.freq > 65535) {
-		Log_print("%d frequency not supported", Sound_out.freq);
+		Log_println("%d frequency not supported", Sound_out.freq);
 		Sound_Exit();
 		return FALSE;
 	}
 	if (Sound_out.channels > MAX_CHANNELS) {
-		Log_print("%d channels not supported", Sound_out.channels);
+		Log_println("%d channels not supported", Sound_out.channels);
 		Sound_Exit();
 		return FALSE;
 	}
@@ -346,7 +346,7 @@ static void FillBuffer(UBYTE *buffer, unsigned int size)
 	/* Just repeat the last good frame if underflow. */
 	if (to_write < size) {
 #if DEBUG
-		Log_print("Sound buffer underflow: fill %d, needed %d",
+		Log_println("Sound buffer underflow: fill %d, needed %d",
 		          to_write/Sound_out.channels/Sound_out.sample_size,
 		          size/Sound_out.channels/Sound_out.sample_size);
 #endif
@@ -364,7 +364,7 @@ static void FillBuffer(UBYTE *buffer, unsigned int size)
 void Sound_Callback(UBYTE *buffer, unsigned int size)
 {
 #if DEBUG >= 2
-		Log_print("Callback: fill %u, needed %u",
+		Log_println("Callback: fill %u, needed %u",
 		          (sync_write_pos - sync_read_pos) / Sound_out.channels / Sound_out.sample_size,
 		          size / Sound_out.channels / Sound_out.sample_size);
 #endif
@@ -381,7 +381,7 @@ static void WriteOut(void)
 
 	if (avail > 0) {
 #if DEBUG >= 2
-		Log_print("WriteOut: fill %u, needed %u",
+		Log_println("WriteOut: fill %u, needed %u",
 		          (sync_write_pos - sync_read_pos) / Sound_out.channels / Sound_out.sample_size,
 		          avail / Sound_out.channels / Sound_out.sample_size);
 #endif
@@ -434,7 +434,7 @@ static void UpdateSyncBuffer(void)
 	if (bytes_written > sync_buffer_size - fill) {
 		/* Overflow of sync_buffer. */
 #if DEBUG
-		Log_print("Sound buffer overflow: free %d, needed %d",
+		Log_println("Sound buffer overflow: free %d, needed %d",
 				  (sync_buffer_size - fill)/Sound_out.channels/Sound_out.sample_size,
 				  bytes_written/Sound_out.channels/Sound_out.sample_size);
 #endif
@@ -454,7 +454,7 @@ static void UpdateSyncBuffer(void)
 	/* Now bytes_written <= audio_buffer_size + dsp_read_pos - dsp_write_pos) */
 
 #if DEBUG >= 2
-	Log_print("UpdateSyncBuffer: est_gap: %f, fill %u, write %u",
+	Log_println("UpdateSyncBuffer: est_gap: %f, fill %u, write %u",
 			(Util_time() - last_audio_write_time)*Sound_out.freq,
 	          fill / Sound_out.channels/Sound_out.sample_size,
 	          bytes_written / Sound_out.channels/Sound_out.sample_size);
@@ -533,7 +533,7 @@ double Sound_AdjustSpeed(void)
 			delay_mult = 1.05;
 #endif
 #if DEBUG >= 2
-		Log_print("delay_mult: %f, est_fill: %u, avg_fill: %f, buf_size: %u, min_fill: %u, max_fill: %u",
+		Log_println("delay_mult: %f, est_fill: %u, avg_fill: %f, buf_size: %u, min_fill: %u, max_fill: %u",
 		          delay_mult,
 		          sync_est_fill / Sound_out.channels / Sound_out.sample_size,
 		          avg_fill / Sound_out.channels / Sound_out.sample_size,

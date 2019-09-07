@@ -956,7 +956,7 @@ int ANTIC_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				ANTIC_artif_mode = Util_sscandec(argv[++i]);
 				if (ANTIC_artif_mode < 0 || ANTIC_artif_mode > 4) {
-					Log_print("Invalid artifacting mode, using default.");
+					Log_println("Invalid artifacting mode, using default.");
 					ANTIC_artif_mode = 0;
 				}
 			}
@@ -964,13 +964,13 @@ int ANTIC_Initialise(int *argc, char *argv[])
 		}
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-artif <num>     Set artifacting mode 0-4 (0 = disable)");
+				Log_println("\t-artif <num>     Set artifacting mode 0-4 (0 = disable)");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}

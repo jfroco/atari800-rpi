@@ -176,7 +176,7 @@ int ARTIFACT_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				int idx = CFG_MatchTextParameter(argv[++i], mode_cfg_strings, ARTIFACT_SIZE);
 				if (idx < 0) {
-					Log_print("Invalid value for -ntsc-artif");
+					Log_println("Invalid value for -ntsc-artif");
 					return FALSE;
 				}
 				mode_ntsc = idx;
@@ -186,7 +186,7 @@ int ARTIFACT_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				int idx = CFG_MatchTextParameter(argv[++i], mode_cfg_strings, ARTIFACT_SIZE);
 				if (idx < 0) {
-					Log_print("Invalid value for -pal-artif");
+					Log_println("Invalid value for -pal-artif");
 					return FALSE;
 				}
 				mode_pal = idx;
@@ -195,16 +195,16 @@ int ARTIFACT_Initialise(int *argc, char *argv[])
 
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-ntsc-artif none|ntsc-old|ntsc-new|ntsc-full");
-				Log_print("\t                 Select video artifacts for NTSC");
-				Log_print("\t-pal-artif none|pal-simple|pal-accu");
-				Log_print("\t                 Select video artifacts for PAL");
+				Log_println("\t-ntsc-artif none|ntsc-old|ntsc-new|ntsc-full");
+				Log_println("\t                 Select video artifacts for NTSC");
+				Log_println("\t-pal-artif none|pal-simple|pal-accu");
+				Log_println("\t                 Select video artifacts for PAL");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}

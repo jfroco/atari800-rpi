@@ -384,7 +384,7 @@ static void SwitchBank(int old_state)
 	}
 #if DEBUG
 	if (old_state != active_cart->state)
-		Log_print("Cart %i state: %02x -> %02x", active_cart == &CARTRIDGE_piggyback, old_state, active_cart->state);
+		Log_println("Cart %i state: %02x -> %02x", active_cart == &CARTRIDGE_piggyback, old_state, active_cart->state);
 #endif
 }
 
@@ -884,7 +884,7 @@ static UBYTE GetByte(CARTRIDGE_image_t *cart, UWORD addr, int no_side_effects)
 
 #if DEBUG
 	if (cart->type > CARTRIDGE_NONE)
-		Log_print("Cart %i read: %04x", cart == &CARTRIDGE_piggyback, addr);
+		Log_println("Cart %i read: %04x", cart == &CARTRIDGE_piggyback, addr);
 #endif
 	/* Set the cartridge's new state. */
 	/* Check types switchable by access to page D5. */
@@ -936,7 +936,7 @@ static void PutByte(CARTRIDGE_image_t *cart, UWORD addr, UBYTE byte)
 
 #if DEBUG
 	if (cart->type > CARTRIDGE_NONE)
-		Log_print("Cart %i write: %04x, %02x", cart == &CARTRIDGE_piggyback, addr, byte);
+		Log_println("Cart %i write: %04x, %02x", cart == &CARTRIDGE_piggyback, addr, byte);
 #endif
 	/* Set the cartridge's new state. */
 	switch (cart->type) {
@@ -1386,7 +1386,7 @@ static int InsertCartridge(const char *filename, CARTRIDGE_image_t *cart)
 		/* alloc memory and read data */
 		cart->image = (UBYTE *) Util_malloc(len);
 		if (fread(cart->image, 1, len, fp) < len) {
-			Log_print("Error reading cartridge.\n");
+			Log_println("Error reading cartridge.\n");
 		}
 		fclose(fp);
 		/* find cart type */
@@ -1413,7 +1413,7 @@ static int InsertCartridge(const char *filename, CARTRIDGE_image_t *cart)
 	}
 	/* if not full kilobytes, assume it is CART file */
 	if (fread(header, 1, 16, fp) < 16) {
-		Log_print("Error reading cartridge.\n");
+		Log_println("Error reading cartridge.\n");
 	}
 	if ((header[0] == 'C') &&
 		(header[1] == 'A') &&
@@ -1431,7 +1431,7 @@ static int InsertCartridge(const char *filename, CARTRIDGE_image_t *cart)
 			/* alloc memory and read data */
 			cart->image = (UBYTE *) Util_malloc(len);
 			if (fread(cart->image, 1, len, fp) < len) {
-				Log_print("Error reading cartridge.\n");
+				Log_println("Error reading cartridge.\n");
 			}
 			fclose(fp);
 			checksum = (header[8] << 24) |
@@ -1536,7 +1536,7 @@ static void InitInsert(CARTRIDGE_image_t *cart)
 		int tmp_type = cart->type;
 		int res = InsertCartridge(cart->filename, cart);
 		if (res < 0) {
-			Log_print("Error inserting cartridge \"%s\": %s", cart->filename,
+			Log_println("Error inserting cartridge \"%s\": %s", cart->filename,
 			res == CARTRIDGE_CANT_OPEN ? "Can't open file" :
 			res == CARTRIDGE_BAD_FORMAT ? "Bad format" :
 			/* Assume r == CARTRIDGE_BAD_CHECKSUM */ "Bad checksum");
@@ -1607,21 +1607,21 @@ int CARTRIDGE_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-cart <file>         Install cartridge (raw or CART format)");
-				Log_print("\t-cart-type <num>     Set cartridge type (0..%i)", CARTRIDGE_LAST_SUPPORTED);
-				Log_print("\t-cart2 <file>        Install piggyback cartridge");
-				Log_print("\t-cart2-type <num>    Set piggyback cartridge type (0..%i)", CARTRIDGE_LAST_SUPPORTED);
-				Log_print("\t-cart-autoreboot     Reboot when cartridge is inserted/removed");
-				Log_print("\t-no-cart-autoreboot  Don't reboot after changing cartridge");
+				Log_println("\t-cart <file>         Install cartridge (raw or CART format)");
+				Log_println("\t-cart-type <num>     Set cartridge type (0..%i)", CARTRIDGE_LAST_SUPPORTED);
+				Log_println("\t-cart2 <file>        Install piggyback cartridge");
+				Log_println("\t-cart2-type <num>    Set piggyback cartridge type (0..%i)", CARTRIDGE_LAST_SUPPORTED);
+				Log_println("\t-cart-autoreboot     Reboot when cartridge is inserted/removed");
+				Log_println("\t-no-cart-autoreboot  Don't reboot after changing cartridge");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		} else if (a_i) {
-			Log_print("Invalid argument for '%s'", argv[--i]);
+			Log_println("Invalid argument for '%s'", argv[--i]);
 			return FALSE;
 		}
 	}

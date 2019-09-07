@@ -354,17 +354,17 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 		fseek(f,0,SEEK_SET);
 		if (fread(&fileheader,1,sizeof(fileheader),f) != sizeof(fileheader)) {
 			Util_fclose(f, sio_tmpbuf[diskno - 1]);
-			Log_print("VAPI: Bad File Header");
+			Log_println("VAPI: Bad File Header");
 			return(FALSE);
 			}
 		trackoffset = VAPI_32(fileheader.startdata);	
 		if (trackoffset > file_length) {
 			Util_fclose(f, sio_tmpbuf[diskno - 1]);
-			Log_print("VAPI: Bad Track Offset");
+			Log_println("VAPI: Bad Track Offset");
 			return(FALSE);
 			}
 #ifdef DEBUG_VAPI
-		Log_print("VAPI File Version %d.%d",fileheader.majorver,fileheader.minorver);
+		Log_println("VAPI File Version %d.%d",fileheader.majorver,fileheader.minorver);
 #endif
 		/* Read all of the track headers to get the total sector count */
 		totalsectors = 0;
@@ -375,7 +375,7 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 			fseek(f,trackoffset,SEEK_SET);
 			if (fread(&trackheader,1,sizeof(trackheader),f) != sizeof(trackheader)) {
 				Util_fclose(f, sio_tmpbuf[diskno - 1]);
-				Log_print("VAPI: Bad Track Header");
+				Log_println("VAPI: Bad Track Header");
 				return(FALSE);
 				}
 			next = VAPI_32(trackheader.next);
@@ -408,7 +408,7 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 				free(info->sectors);
 				free(info);
 				Util_fclose(f, sio_tmpbuf[diskno - 1]);
-				Log_print("VAPI: Bad Track Header while reading sectors");
+				Log_println("VAPI: Bad Track Header while reading sectors");
 				return(FALSE);
 				}
 			next = VAPI_32(trackheader.next);
@@ -416,7 +416,7 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 			tracktype = VAPI_16(trackheader.type);
 			seclistdata = VAPI_32(trackheader.startdata) + trackoffset;
 #ifdef DEBUG_VAPI
-			Log_print("Track %d: next %x type %d seccnt %d secdata %x",trackheader.tracknum,
+			Log_println("Track %d: next %x type %d seccnt %d secdata %x",trackheader.tracknum,
 				trackoffset + next,VAPI_16(trackheader.type),sectorcnt,seclistdata);
 #endif
 			if (tracktype == 0) {
@@ -424,7 +424,7 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 					free(info->sectors);
 					free(info);
 					Util_fclose(f, sio_tmpbuf[diskno - 1]);
-					Log_print("VAPI: Bad Sector List Offset");
+					Log_println("VAPI: Bad Sector List Offset");
 					return(FALSE);
 					}
 				fseek(f,seclistdata,SEEK_SET);
@@ -432,11 +432,11 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 					free(info->sectors);
 					free(info);
 					Util_fclose(f, sio_tmpbuf[diskno - 1]);
-					Log_print("VAPI: Bad Sector List");
+					Log_println("VAPI: Bad Sector List");
 					return(FALSE);
 					}
 #ifdef DEBUG_VAPI
-				Log_print("Size sec list %x type %d",VAPI_32(sectorlist.sizelist),sectorlist.type);
+				Log_println("Size sec list %x type %d",VAPI_32(sectorlist.sizelist),sectorlist.type);
 #endif
 				for (j=0;j<sectorcnt;j++) {
 					double percent_rot;
@@ -445,12 +445,12 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 						free(info->sectors);
 						free(info);
 						Util_fclose(f, sio_tmpbuf[diskno - 1]);
-						Log_print("VAPI: Bad Sector Header");
+						Log_println("VAPI: Bad Sector Header");
 						return(FALSE);
 						}
 					if (sectorheader.sectornum > 18)  {
 						Util_fclose(f, sio_tmpbuf[diskno - 1]);
-						Log_print("VAPI: Bad Sector Index: Track %d Sec Num %d Index %d",
+						Log_println("VAPI: Bad Sector Index: Track %d Sec Num %d Index %d",
 								trackheader.tracknum,j,sectorheader.sectornum);
 						return(FALSE);
 						}
@@ -465,11 +465,11 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 						free(info->sectors);
 						free(info);
 						Util_fclose(f, sio_tmpbuf[diskno - 1]);
-						Log_print("VAPI: Too many Phantom Sectors");
+						Log_println("VAPI: Too many Phantom Sectors");
 						return(FALSE);
 						}
 #ifdef DEBUG_VAPI
-					Log_print("Sector %d status %x position %f %d %d data %x",sectorheader.sectornum,
+					Log_println("Sector %d status %x position %f %d %d data %x",sectorheader.sectornum,
 						sector->sec_status[sector->sec_count-1],percent_rot,
 						sector->sec_rot_pos[sector->sec_count-1],
 						VAPI_16(sectorheader.sectorpos),
@@ -480,7 +480,7 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 				Log_flushlog();
 #endif
 			} else {
-				Log_print("Unknown VAPI track type Track:%d Type:%d",trackheader.tracknum,tracktype);
+				Log_println("Unknown VAPI track type Track:%d Type:%d",trackheader.tracknum,tracktype);
 			}
 			trackoffset += next;
 		}			
@@ -541,7 +541,7 @@ int SIO_Mount(int diskno, const char *filename, int b_open_readonly)
 	}
 
 #ifdef DEBUG
-	Log_print("sectorcount = %d, sectorsize = %d",
+	Log_println("sectorcount = %d, sectorsize = %d",
 		   sectorcount[diskno - 1], sectorsize[diskno - 1]);
 #endif
 	SIO_format_sectorsize[diskno - 1] = sectorsize[diskno - 1];
@@ -668,27 +668,27 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 		info = (pro_additional_info_t *)additional_info[unit];
 		count = info->count;
 		if (fread(buffer, 1, 12, disk[unit]) < 12) {
-			Log_print("Error in header of .pro image: sector:%d", sector);
+			Log_println("Error in header of .pro image: sector:%d", sector);
 			return 'E';
 		}
 		/* handle duplicate sectors */
 		if (buffer[5] != 0) {
 			int dupnum = count[sector];
 #ifdef DEBUG_PRO
-			Log_print("duplicate sector:%d dupnum:%d",sector, dupnum);
+			Log_println("duplicate sector:%d dupnum:%d",sector, dupnum);
 #endif
 			count[sector] = (count[sector]+1) % (buffer[5]+1);
 			if (dupnum != 0)  {
 				sector = sectorcount[unit] + buffer[6+dupnum];
 				/* can dupnum be 5? */
 				if (dupnum > 4 || sector <= 0 || sector > info->max_sector) {
-					Log_print("Error in .pro image: sector:%d dupnum:%d", sector, dupnum);
+					Log_println("Error in .pro image: sector:%d dupnum:%d", sector, dupnum);
 					return 'E';
 				}
 				size = SeekSector(unit, sector);
 				/* read sector header */
 				if (fread(buffer, 1, 12, disk[unit]) < 12) {
-					Log_print("Error in header2 of .pro image: sector:%d dupnum:%d", sector, dupnum);
+					Log_println("Error in header2 of .pro image: sector:%d dupnum:%d", sector, dupnum);
 					return 'E';
 				}
 			}
@@ -696,11 +696,11 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 		/* bad sector */
 		if (buffer[1] != 0xff) {
 			if (fread(buffer, 1, size, disk[unit]) < size) {
-				Log_print("Error in bad sector of .pro image: sector:%d", sector);
+				Log_println("Error in bad sector of .pro image: sector:%d", sector);
 			}
 			io_success[unit] = sector;
 #ifdef DEBUG_PRO
-			Log_print("bad sector:%d", sector);
+			Log_println("bad sector:%d", sector);
 #endif
 			return 'E';
 		}
@@ -719,7 +719,7 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 
 		if (sector > sectorcount[unit]) {
 #ifdef DEBUG_VAPI
-			Log_print("bad sector num:%d", sector);
+			Log_println("bad sector num:%d", sector);
 #endif
 			info->sec_stat_buff[0] = 9;
 			info->sec_stat_buff[1] = 0xFF; 
@@ -735,7 +735,7 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 
 		if (secinfo->sec_count == 0) {
 #ifdef DEBUG_VAPI
-			Log_print("missing sector:%d", sector);
+			Log_println("missing sector:%d", sector);
 #endif
 			info->sec_stat_buff[0] = 0xC;
 			info->sec_stat_buff[1] = 0xEF; 
@@ -754,7 +754,7 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 		currpos = time - rotations*VAPI_CYCLES_PER_ROT;
 
 #ifdef DEBUG_VAPI
-		Log_print(" sector:%d sector count :%d time %d", sector,secinfo->sec_count,ANTIC_CPU_CLOCK);
+		Log_println(" sector:%d sector count :%d time %d", sector,secinfo->sec_count,ANTIC_CPU_CLOCK);
 #endif
 
 		bestdelay = 10 * VAPI_CYCLES_PER_ROT;
@@ -765,7 +765,7 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 			else
 				delay = secinfo->sec_rot_pos[j] - currpos; 
 #ifdef DEBUG_VAPI
-			Log_print("%d %d %d %d %d %x",j,secinfo->sec_rot_pos[j],
+			Log_println("%d %d %d %d %d %x",j,secinfo->sec_rot_pos[j],
 					  ((unsigned int) ANTIC_CPU_CLOCK) - ((((unsigned int) ANTIC_CPU_CLOCK)/VAPI_CYCLES_PER_ROT)*VAPI_CYCLES_PER_ROT),
 					  currpos,delay,secinfo->sec_status[j]);
 #endif
@@ -783,9 +783,9 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 			info->vapi_delay_time = bestdelay + 
 						       VAPI_CYCLES_CMD_ACK_TRANS + VAPI_CYCLES_SECTOR_READ;
 #ifdef DEBUG_VAPI
-		Log_print("Bestdelay = %d VapiDelay = %d",bestdelay,info->vapi_delay_time);
+		Log_println("Bestdelay = %d VapiDelay = %d",bestdelay,info->vapi_delay_time);
 		if (secinfo->sec_count > 1)
-			Log_print("duplicate sector:%d dupnum:%d delay:%d",sector, secindex,info->vapi_delay_time);
+			Log_println("duplicate sector:%d dupnum:%d delay:%d",sector, secindex,info->vapi_delay_time);
 #endif
 		fseek(disk[unit],secinfo->sec_offset[secindex],SEEK_SET);
 		info->sec_stat_buff[0] = 0x8 | ((secinfo->sec_status[secindex] == 0xFF) ? 0 : 0x04);
@@ -794,18 +794,18 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 		info->sec_stat_buff[3] = 0;
 		if (secinfo->sec_status[secindex] != 0xFF) {
 			if (fread(buffer, 1, size, disk[unit]) < size) {
-				Log_print("error reading sector:%d", sector);
+				Log_println("error reading sector:%d", sector);
 			}
 			io_success[unit] = sector;
 			info->vapi_delay_time += VAPI_CYCLES_PER_ROT + 10000;
 #ifdef DEBUG_VAPI
-			Log_print("bad sector:%d 0x%0X delay:%d", sector, secinfo->sec_status[secindex],info->vapi_delay_time );
+			Log_println("bad sector:%d 0x%0X delay:%d", sector, secinfo->sec_status[secindex],info->vapi_delay_time );
 #endif
 			{
 			int i;
 				if (secinfo->sec_status[secindex] == 0xB7) {
 					for (i=0;i<128;i++) {
-						Log_print("0x%02x",buffer[i]);
+						Log_println("0x%02x",buffer[i]);
 						if (buffer[i] == 0x33)
 							buffer[i] = rand() & 0xFF;
 					}
@@ -818,7 +818,7 @@ int SIO_ReadSector(int unit, int sector, UBYTE *buffer)
 #endif		
 	}
 	if (fread(buffer, 1, size, disk[unit]) < size) {
-		Log_print("incomplete sector num:%d", sector);
+		Log_println("incomplete sector num:%d", sector);
 	}
 	io_success[unit] = 0;
 	return 'C';
@@ -916,7 +916,7 @@ int SIO_FormatDisk(int unit, UBYTE *buffer, int sectsize, int sectcount)
 	SIO_Dismount(unit + 1);
 	f = fopen(fname, "wb");
 	if (f == NULL) {
-		Log_print("SIO_FormatDisk: failed to open %s for writing", fname);
+		Log_println("SIO_FormatDisk: failed to open %s for writing", fname);
 		return 'E';
 	}
 	/* Write ATR header if necessary */
@@ -965,7 +965,7 @@ int SIO_WriteStatusBlock(int unit, const UBYTE *buffer)
 {
 	int size;
 #ifdef DEBUG
-	Log_print("Write Status-Block: %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",
+	Log_println("Write Status-Block: %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",
 		buffer[0], buffer[1], buffer[2], buffer[3],
 		buffer[4], buffer[5], buffer[6], buffer[7],
 		buffer[8], buffer[9], buffer[10], buffer[11]);
@@ -1069,7 +1069,7 @@ int SIO_DriveStatus(int unit, UBYTE *buffer)
 		int sector = io_success[unit];
 		SeekSector(unit, sector);
 		if (fread(buffer, 1, 4, disk[unit]) < 4) {
-			Log_print("SIO_DriveStatus: failed to read sector header");
+			Log_println("SIO_DriveStatus: failed to read sector header");
 		}
 		return 'C';
 	}
@@ -1081,7 +1081,7 @@ int SIO_DriveStatus(int unit, UBYTE *buffer)
 		buffer[1] = info->sec_stat_buff[1];
 		buffer[2] = info->sec_stat_buff[2];
 		buffer[3] = info->sec_stat_buff[3];
-		Log_print("Drive Status unit %d %x %x %x %x",unit,buffer[0], buffer[1], buffer[2], buffer[3]);
+		Log_println("Drive Status unit %d %x %x %x %x",unit,buffer[0], buffer[1], buffer[2], buffer[3]);
 		return 'C';
 	}	
 	buffer[0] = 16;         /* drive active */
@@ -1129,7 +1129,7 @@ void SIO_Handler(void)
 	/* Disk 1 -> unit = 0 */
 	if (MEMORY_dGetByte(0x300) != 0x60 && unit < SIO_MAX_DRIVES && (SIO_drive_status[unit] != SIO_OFF || BINLOAD_start_binloading)) {	/* UBYTE range ! */
 #ifdef DEBUG
-		Log_print("SIO disk command is %02x %02x %02x %02x %02x   %02x %02x %02x %02x %02x %02x",
+		Log_println("SIO disk command is %02x %02x %02x %02x %02x   %02x %02x %02x %02x %02x %02x",
 			cmd, MEMORY_dGetByte(0x303), MEMORY_dGetByte(0x304), MEMORY_dGetByte(0x305), MEMORY_dGetByte(0x306),
 			MEMORY_dGetByte(0x308), MEMORY_dGetByte(0x309), MEMORY_dGetByte(0x30a), MEMORY_dGetByte(0x30b),
 			MEMORY_dGetByte(0x30c), MEMORY_dGetByte(0x30d));
@@ -1338,7 +1338,7 @@ static UBYTE Command_Frame(void)
 
 	if (unit < 0 || unit >= SIO_MAX_DRIVES) {
 		/* Unknown device */
-		Log_print("Unknown command frame: %02x %02x %02x %02x %02x",
+		Log_println("Unknown command frame: %02x %02x %02x %02x %02x",
 			   CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			   CommandFrame[3], CommandFrame[4]);
 		TransferStatus = SIO_NoFrame;
@@ -1347,7 +1347,7 @@ static UBYTE Command_Frame(void)
 	switch (CommandFrame[1]) {
 	case 0x4e:				/* Read Status */
 #ifdef DEBUG
-		Log_print("Read-status frame: %02x %02x %02x %02x %02x",
+		Log_println("Read-status frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1360,7 +1360,7 @@ static UBYTE Command_Frame(void)
 		return 'A';
 	case 0x4f:				/* Write status */
 #ifdef DEBUG
-		Log_print("Write-status frame: %02x %02x %02x %02x %02x",
+		Log_println("Write-status frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1373,7 +1373,7 @@ static UBYTE Command_Frame(void)
 	case 0xD0:				/* xf551 hispeed */
 	case 0xD7:
 #ifdef DEBUG
-		Log_print("Write-sector frame: %02x %02x %02x %02x %02x",
+		Log_println("Write-sector frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1388,7 +1388,7 @@ static UBYTE Command_Frame(void)
 	case 0x52:				/* Read */
 	case 0xD2:				/* xf551 hispeed */
 #ifdef DEBUG
-		Log_print("Read-sector frame: %02x %02x %02x %02x %02x",
+		Log_println("Read-sector frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1424,7 +1424,7 @@ static UBYTE Command_Frame(void)
 		return 'A';
 	case 0x53:				/* Status */
 #ifdef DEBUG
-		Log_print("Status frame: %02x %02x %02x %02x %02x",
+		Log_println("Status frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1439,7 +1439,7 @@ static UBYTE Command_Frame(void)
 	case 0x21:				/* Format Disk */
 	case 0xa1:				/* xf551 hispeed */
 #ifdef DEBUG
-		Log_print("Format-disk frame: %02x %02x %02x %02x %02x",
+		Log_println("Format-disk frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1454,7 +1454,7 @@ static UBYTE Command_Frame(void)
 	case 0x22:				/* Dual Density Format */
 	case 0xa2:				/* xf551 hispeed */
 #ifdef DEBUG
-		Log_print("Format-Medium frame: %02x %02x %02x %02x %02x",
+		Log_println("Format-Medium frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1468,7 +1468,7 @@ static UBYTE Command_Frame(void)
 	default:
 		/* Unknown command for a disk drive */
 #ifdef DEBUG
-		Log_print("Command frame: %02x %02x %02x %02x %02x",
+		Log_println("Command frame: %02x %02x %02x %02x %02x",
 			CommandFrame[0], CommandFrame[1], CommandFrame[2],
 			CommandFrame[3], CommandFrame[4]);
 #endif
@@ -1502,7 +1502,7 @@ void SIO_SwitchCommandFrame(int onoff)
 {
 	if (onoff) {				/* Enabled */
 		if (TransferStatus != SIO_NoFrame)
-			Log_print("Unexpected command frame at state %x.", TransferStatus);
+			Log_println("Unexpected command frame at state %x.", TransferStatus);
 		CommandIndex = 0;
 		DataIndex = 0;
 		ExpectedBytes = 5;
@@ -1512,7 +1512,7 @@ void SIO_SwitchCommandFrame(int onoff)
 		if (TransferStatus != SIO_StatusRead && TransferStatus != SIO_NoFrame &&
 			TransferStatus != SIO_ReadFrame) {
 			if (!(TransferStatus == SIO_CommandFrame && CommandIndex == 0))
-				Log_print("Command frame %02x unfinished.", TransferStatus);
+				Log_println("Command frame %02x unfinished.", TransferStatus);
 			TransferStatus = SIO_NoFrame;
 		}
 		CommandIndex = 0;
@@ -1558,7 +1558,7 @@ void SIO_PutByte(int byte)
 			}
 		}
 		else {
-			Log_print("Invalid command frame!");
+			Log_println("Invalid command frame!");
 			TransferStatus = SIO_NoFrame;
 		}
 		break;
@@ -1590,7 +1590,7 @@ void SIO_PutByte(int byte)
 			}
 		}
 		else {
-			Log_print("Invalid data frame!");
+			Log_println("Invalid data frame!");
 		}
 		break;
 	case SIO_CasReadWrite:
@@ -1626,7 +1626,7 @@ int SIO_GetByte(void)
 			}
 		}
 		else {
-			Log_print("Invalid read frame!");
+			Log_println("Invalid read frame!");
 			TransferStatus = SIO_NoFrame;
 		}
 		break;
@@ -1644,7 +1644,7 @@ int SIO_GetByte(void)
 			}
 		}
 		else {
-			Log_print("Invalid read frame!");
+			Log_println("Invalid read frame!");
 			TransferStatus = SIO_NoFrame;
 		}
 		break;

@@ -219,7 +219,7 @@ int FILTER_NTSC_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				int idx = CFG_MatchTextParameter(argv[++i], preset_cfg_strings, FILTER_NTSC_PRESET_SIZE);
 				if (idx < 0) {
-					Log_print("Invalid value for -ntsc-filter-preset");
+					Log_println("Invalid value for -ntsc-filter-preset");
 					return FALSE;
 				}
 				FILTER_NTSC_SetPreset(idx);
@@ -227,20 +227,20 @@ int FILTER_NTSC_Initialise(int *argc, char *argv[])
 		}
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-ntsc-sharpness <n>   Set sharpness for NTSC filter (default %.2g)", FILTER_NTSC_setup.sharpness);
-				Log_print("\t-ntsc-resolution <n>  Set resolution for NTSC filter (default %.2g)", FILTER_NTSC_setup.resolution);
-				Log_print("\t-ntsc-artifacts <n>   Set luma artifacts ratio for NTSC filter (default %.2g)", FILTER_NTSC_setup.artifacts);
-				Log_print("\t-ntsc-fringing <n>    Set chroma fringing ratio for NTSC filter (default %.2g)", FILTER_NTSC_setup.fringing);
-				Log_print("\t-ntsc-bleed <n>       Set bleed for NTSC filter (default %.2g)", FILTER_NTSC_setup.bleed);
-				Log_print("\t-ntsc-burstphase <n>  Set burst phase (artifact colours) for NTSC filter (default %.2g)", FILTER_NTSC_setup.burst_phase);
-				Log_print("\t-ntsc-filter-preset composite|svideo|rgb|monochrome");
-				Log_print("\t                      Use one of predefined NTSC filter adjustments");
+				Log_println("\t-ntsc-sharpness <n>   Set sharpness for NTSC filter (default %.2g)", FILTER_NTSC_setup.sharpness);
+				Log_println("\t-ntsc-resolution <n>  Set resolution for NTSC filter (default %.2g)", FILTER_NTSC_setup.resolution);
+				Log_println("\t-ntsc-artifacts <n>   Set luma artifacts ratio for NTSC filter (default %.2g)", FILTER_NTSC_setup.artifacts);
+				Log_println("\t-ntsc-fringing <n>    Set chroma fringing ratio for NTSC filter (default %.2g)", FILTER_NTSC_setup.fringing);
+				Log_println("\t-ntsc-bleed <n>       Set bleed for NTSC filter (default %.2g)", FILTER_NTSC_setup.bleed);
+				Log_println("\t-ntsc-burstphase <n>  Set burst phase (artifact colours) for NTSC filter (default %.2g)", FILTER_NTSC_setup.burst_phase);
+				Log_println("\t-ntsc-filter-preset composite|svideo|rgb|monochrome");
+				Log_println("\t                      Use one of predefined NTSC filter adjustments");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}

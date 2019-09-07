@@ -41,7 +41,7 @@ int PLATFORM_SoundSetup(Sound_setup_t *setup)
 	if (Sound_enabled)
 		SDL_CloseAudio();
 	else if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
-		Log_print("SDL_INIT_AUDIO FAILED: %s", SDL_GetError());
+		Log_println("SDL_INIT_AUDIO FAILED: %s", SDL_GetError());
 		return FALSE;
 	}
 

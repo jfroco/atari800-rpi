@@ -34,6 +34,7 @@
 #include <linux/lp.h>
 #endif /* LPTJOY */
 
+#include <stdbool.h>
 #include <SDL.h>
 
 #include "config.h"
@@ -54,6 +55,8 @@
 #ifdef USE_UI_BASIC_ONSCREEN_KEYBOARD
 #include "ui_basic.h"
 #endif
+
+extern bool LOG_DEBUG_SDL_BUTTONS;
 
 static int grab_mouse = FALSE;
 static int swap_joysticks = FALSE;
@@ -335,6 +338,30 @@ static Uint32 ResizeDelayCallback(Uint32 interval, void *param)
 static unsigned char *atari_screen_backup;
 #endif
 
+void dumpJoystickButtons() {
+	int i;
+	if (joystick0) {
+		Log_print("SDL joystick 0 button state (0..%d) = ", joystick0_nbuttons);
+		for (i = 0; i < joystick0_nbuttons; i++) {
+			Log_print(" %d", SDL_JoystickGetButton(joystick0, i));
+			if (JOY_0_SELECT == i) {
+				Log_print("(SELECT)");
+			}
+			if (JOY_0_START == i) {
+				Log_print("(START)");
+			}
+		}
+		Log_print("\n");
+	}
+	if (joystick1) {
+		Log_print("SDL joystick 1 button state (0..%d) = ", joystick1_nbuttons);
+		for (i = 0; i < joystick1_nbuttons; i++) {
+			Log_print("%d", SDL_JoystickGetButton(joystick1, i));
+		}
+		Log_print("\n");
+	}
+}
+
 int PLATFORM_Keyboard(void)
 {
 	int shiftctrl = 0;
@@ -392,7 +419,7 @@ int PLATFORM_Keyboard(void)
 				VIDEOMODE_SetWindowSize(event.resize.w, event.resize.h);
 				resize_delayed = TRUE;
 				if (SDL_AddTimer(RESIZE_INTERVAL, &ResizeDelayCallback, NULL) == NULL) {
-					Log_print("Error: SDL_AddTimer failed: %s", SDL_GetError());
+					Log_println("Error: SDL_AddTimer failed: %s", SDL_GetError());
 					Log_flushlog();
 					exit(-1);
 				}
@@ -423,7 +450,7 @@ int PLATFORM_Keyboard(void)
 					else {
 						VIDEOMODE_SetWindowSize(resize_w, resize_h);
 						if (SDL_AddTimer(RESIZE_INTERVAL, &ResizeDelayCallback, NULL) == NULL) {
-							Log_print("Error: SDL_AddTimer failed: %s", SDL_GetError());
+							Log_println("Error: SDL_AddTimer failed: %s", SDL_GetError());
 							Log_flushlog();
 							exit(-1);
 						}
@@ -656,7 +683,7 @@ int PLATFORM_Keyboard(void)
 
 	/*
 	if (event.type == 2 || event.type == 3) {
-		Log_print("E:%x S:%x C:%x K:%x U:%x M:%x",event.type,INPUT_key_shift,key_control,lastkey,event.key.keysym.unicode,event.key.keysym.mod);
+		Log_println("E:%x S:%x C:%x K:%x U:%x M:%x",event.type,INPUT_key_shift,key_control,lastkey,event.key.keysym.unicode,event.key.keysym.mod);
 	}
 	*/
 
@@ -670,30 +697,52 @@ int PLATFORM_Keyboard(void)
 		INPUT_key_consol &= (~INPUT_CONSOL_START);
 
 	/* ATARI 5200: Special button combinations for SELECT & START & MENU NAVIGATION*/
-		int select = SDL_JoystickGetButton(joystick0,JOY_0_SELECT);
-		int start = SDL_JoystickGetButton(joystick0,JOY_0_START);
-		if (select && start) return AKEY_EXIT;
-		if (!UI_is_active) {
-			if (start) return AKEY_5200_START;
-			int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
-			if (select && aster) return AKEY_UI;
-			if (aster) return AKEY_5200_ASTERISK;
-			int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
-			if (select && hash) return AKEY_WARMSTART;
-			if (hash) return AKEY_5200_HASH;
-		} else {
-			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
-			if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
-			if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
-			if (joystick0 != NULL) {
-				int hat = SDL_JoystickGetHat(joystick0, 0);
-				if (hat == SDL_HAT_UP) return AKEY_UP;
-				if (hat == SDL_HAT_DOWN) return AKEY_DOWN;
-				int y = SDL_JoystickGetAxis(joystick0, 1);
-				if (y < -minjoy) return AKEY_UP;
-				if (y > minjoy) return AKEY_DOWN;
-			}
+	int select = SDL_JoystickGetButton(joystick0,JOY_0_SELECT);
+	int start = SDL_JoystickGetButton(joystick0,JOY_0_START);
+	if (LOG_DEBUG_SDL_BUTTONS) {
+		Log_println("UI active = %d", UI_is_active);
+		dumpJoystickButtons();
+	}
+	if (select && start) {
+		return AKEY_EXIT;
+	}
+	if (!UI_is_active) {
+		if (start) {
+			return AKEY_5200_START;
 		}
+		int aster = SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK);
+		if (select && aster) {
+			return AKEY_UI;
+		}
+		if (aster) {
+			return AKEY_5200_ASTERISK;
+		}
+		int hash = SDL_JoystickGetButton(joystick0,JOY_0_HASH);
+		if (select && hash) {
+			return AKEY_WARMSTART;
+		}
+		if (hash) {
+			return AKEY_5200_HASH;
+		}
+	} else {
+		if (select) {
+			INPUT_key_consol &= (~INPUT_CONSOL_SELECT);
+		}
+		if (start) {
+			INPUT_key_consol &= (~INPUT_CONSOL_START);
+		}
+		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER1)) return AKEY_RETURN;
+		if (SDL_JoystickGetButton(joystick0,JOY_0_TRIGGER2)) return AKEY_ESCAPE;
+		if (select && SDL_JoystickGetButton(joystick0,JOY_0_ASTERISK)) return AKEY_ESCAPE;
+		if (joystick0 != NULL) {
+			int hat = SDL_JoystickGetHat(joystick0, 0);
+			if (hat == SDL_HAT_UP) return AKEY_UP;
+			if (hat == SDL_HAT_DOWN) return AKEY_DOWN;
+			int y = SDL_JoystickGetAxis(joystick0, 1);
+			if (y < -minjoy) return AKEY_UP;
+			if (y > minjoy) return AKEY_DOWN;
+		}
+	}
 
 
 	if (key_pressed == 0)
@@ -1226,10 +1275,14 @@ static void Init_SDL_Joysticks(int first, int second)
 	if (first) {
 		joystick0 = SDL_JoystickOpen(JOY_0_INDEX);
 		if (joystick0 == NULL)
-			Log_print("joystick 0 not found");
+			Log_println("joystick 0 with index %d not found", JOY_0_INDEX);
 		else {
-			Log_print("joystick 0 found!");
 			joystick0_nbuttons = SDL_JoystickNumButtons(joystick0);
+
+			Log_println("SDL joystick 0 with %d buttons found.", joystick0_nbuttons);
+			Log_println("SDL joystick 0 Number of Axes: %d", SDL_JoystickNumAxes(joystick0));
+			Log_println("SDL joystick 0 Number of Buttons: %d", SDL_JoystickNumButtons(joystick0));
+			Log_println("SDL joystick 0 Number of Balls: %d", SDL_JoystickNumBalls(joystick0));
 #ifdef USE_UI_BASIC_ONSCREEN_KEYBOARD
 			if (joystick0_nbuttons > OSK_MAX_BUTTONS)
 				joystick0_nbuttons = OSK_MAX_BUTTONS;
@@ -1240,10 +1293,13 @@ static void Init_SDL_Joysticks(int first, int second)
 	if (second) {
 		joystick1 = SDL_JoystickOpen(JOY_1_INDEX);
 		if (joystick1 == NULL)
-			Log_print("joystick 1 not found");
+			Log_println("joystick 1 with index %d not found", JOY_1_INDEX);
 		else {
-			Log_print("joystick 1 found!");
 			joystick1_nbuttons = SDL_JoystickNumButtons(joystick1);
+			Log_println("SDL joystick 1 with %d buttons found.", joystick1_nbuttons);
+			Log_println("SDL joystick 1 Number of Axes: %d", SDL_JoystickNumAxes(joystick1));
+			Log_println("SDL joystick 1 Number of Buttons: %d", SDL_JoystickNumButtons(joystick1));
+			Log_println("SDL joystick 1 Number of Balls: %d", SDL_JoystickNumBalls(joystick1));
 #ifdef USE_UI_BASIC_ONSCREEN_KEYBOARD
 			if (joystick1_nbuttons > OSK_MAX_BUTTONS)
 				joystick1_nbuttons = OSK_MAX_BUTTONS;
@@ -1271,7 +1327,7 @@ int SDL_INPUT_Initialise(int *argc, char *argv[])
 		int a_m = FALSE;			/* error, argument missing! */
 		if (strcmp(argv[i], "-nojoystick") == 0) {
 			no_joystick = TRUE;
-			Log_print("no joystick");
+			Log_println("no joystick");
 		}
 		else if (strcmp(argv[i], "-grabmouse") == 0) {
 			grab_mouse = TRUE;
@@ -1293,18 +1349,18 @@ int SDL_INPUT_Initialise(int *argc, char *argv[])
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
 				help_only = TRUE;
-				Log_print("\t-nojoystick      Disable joystick");
+				Log_println("\t-nojoystick      Disable joystick");
 #ifdef LPTJOY
-				Log_print("\t-joy0 <pathname> Select LPTjoy0 device");
-				Log_print("\t-joy1 <pathname> Select LPTjoy1 device");
+				Log_println("\t-joy0 <pathname> Select LPTjoy0 device");
+				Log_println("\t-joy1 <pathname> Select LPTjoy1 device");
 #endif /* LPTJOY */
-				Log_print("\t-grabmouse       Prevent mouse pointer from leaving window");
+				Log_println("\t-grabmouse       Prevent mouse pointer from leaving window");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
@@ -1335,7 +1391,7 @@ int SDL_INPUT_Initialise(int *argc, char *argv[])
 	kbhits = SDL_GetKeyState(NULL);
 
 	if (kbhits == NULL) {
-		Log_print("SDL_GetKeyState() failed");
+		Log_println("SDL_GetKeyState() failed");
 		Log_flushlog();
 		return FALSE;
 	}
@@ -1365,20 +1421,28 @@ if (!delta) {
 	h = SDL_JoystickGetHat(joystick, 0);
 	switch(h) {
 		case SDL_HAT_LEFTUP:
+			Log_println("SDL Joystick SDL_HAT_LEFTUP");
 			return INPUT_STICK_UL;
 		case SDL_HAT_RIGHTUP:
+			Log_println("SDL Joystick SDL_HAT_RIGHTUP");
 			return INPUT_STICK_UR;
 		case SDL_HAT_UP:
+			Log_println("SDL Joystick SDL_HAT_UP");
 			return INPUT_STICK_FORWARD;
 		case SDL_HAT_LEFTDOWN:
+			Log_println("SDL Joystick SDL_HAT_LEFTDOWN");
 			return INPUT_STICK_LL;
 		case SDL_HAT_RIGHTDOWN:
+			Log_println("SDL Joystick SDL_HAT_RIGHTDOWN");
 			return INPUT_STICK_LR;
 		case SDL_HAT_DOWN:
+			Log_println("SDL Joystick SDL_HAT_DOWN");
 			return INPUT_STICK_BACK;
 		case SDL_HAT_LEFT:
+			Log_println("SDL Joystick SDL_HAT_LEFT");
 			return INPUT_STICK_LEFT;
 		case SDL_HAT_RIGHT:
+			Log_println("SDL Joystick SDL_HAT_RIGHT");
 			return INPUT_STICK_RIGHT;
 		/* case SDL_HAT_CENTERED:
 			return INPUT_STICK_CENTRE; */

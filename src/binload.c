@@ -47,7 +47,7 @@ static int read_word(void)
 		BINLOAD_bin_file = NULL;
 		if (BINLOAD_start_binloading) {
 			BINLOAD_start_binloading = FALSE;
-			Log_print("binload: not valid BIN file");
+			Log_println("binload: not valid BIN file");
 			return -1;
 		}
 		CPU_regPC = MEMORY_dGetWordAligned(0x2e0);
@@ -148,12 +148,12 @@ int BINLOAD_Loader(const char *filename)
 		BINLOAD_loading_basic = 0;
 	}
 	if (Atari800_machine_type == Atari800_MACHINE_5200) {
-		Log_print("binload: can't run Atari programs directly on the 5200");
+		Log_println("binload: can't run Atari programs directly on the 5200");
 		return FALSE;
 	}
 	BINLOAD_bin_file = fopen(filename, "rb");
 	if (BINLOAD_bin_file == NULL) {	/* open */
-		Log_print("binload: can't open \"%s\"", filename);
+		Log_println("binload: can't open \"%s\"", filename);
 		return FALSE;
 	}
 	/* Avoid "BOOT ERROR" when loading a BASIC program */
@@ -180,6 +180,6 @@ int BINLOAD_Loader(const char *filename)
 	}
 	fclose(BINLOAD_bin_file);
 	BINLOAD_bin_file = NULL;
-	Log_print("binload: \"%s\" not recognized as a DOS or BASIC program", filename);
+	Log_println("binload: \"%s\" not recognized as a DOS or BASIC program", filename);
 	return FALSE;
 }

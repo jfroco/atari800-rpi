@@ -617,30 +617,30 @@ int SYSROM_Initialise(int *argc, char *argv[])
 		}
 		else {
 			if (strcmp(argv[i], "-help") == 0) {
-				Log_print("\t-osa_rom <file>   Load OS A ROM from file");
-				Log_print("\t-osb_rom <file>   Load OS B ROM from file");
-				Log_print("\t-xlxe_rom <file>  Load XL/XE ROM from file");
-				Log_print("\t-5200_rom <file>  Load 5200 ROM from file");
-				Log_print("\t-basic_rom <file> Load BASIC ROM from file");
-				Log_print("\t-800-rev auto|a-ntsc|a-pal|b-ntsc|custom");
-				Log_print("\t                  Select 400/800 OS revision");
-				Log_print("\t-xl-rev auto|10|11|1|2|3a|3b|5|3|4|59|59a|custom");
-				Log_print("\t                  Select XL/XE OS revision");
-				Log_print("\t-5200-rev auto|orig|a|custom");
-				Log_print("\t                  Select 5200 OS revision");
-				Log_print("\t-basic-rev auto|a|b|c|custom");
-				Log_print("\t                  Select BASIC revision");
-				Log_print("\t-xegame-rev auto|orig|custom");
-				Log_print("\t                  Select XEGS builtin game version");
+				Log_println("\t-osa_rom <file>   Load OS A ROM from file");
+				Log_println("\t-osb_rom <file>   Load OS B ROM from file");
+				Log_println("\t-xlxe_rom <file>  Load XL/XE ROM from file");
+				Log_println("\t-5200_rom <file>  Load 5200 ROM from file");
+				Log_println("\t-basic_rom <file> Load BASIC ROM from file");
+				Log_println("\t-800-rev auto|a-ntsc|a-pal|b-ntsc|custom");
+				Log_println("\t                  Select 400/800 OS revision");
+				Log_println("\t-xl-rev auto|10|11|1|2|3a|3b|5|3|4|59|59a|custom");
+				Log_println("\t                  Select XL/XE OS revision");
+				Log_println("\t-5200-rev auto|orig|a|custom");
+				Log_println("\t                  Select 5200 OS revision");
+				Log_println("\t-basic-rev auto|a|b|c|custom");
+				Log_println("\t                  Select BASIC revision");
+				Log_println("\t-xegame-rev auto|orig|custom");
+				Log_println("\t                  Select XEGS builtin game version");
 			}
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		} else if (a_i) {
-			Log_print("Invalid argument for '%s'", argv[--i]);
+			Log_println("Invalid argument for '%s'", argv[--i]);
 			return FALSE;
 		}
 	}

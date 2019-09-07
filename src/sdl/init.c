@@ -32,10 +32,11 @@
 int SDL_INIT_Initialise(void)
 {
 	if (SDL_Init(0) != 0) {
-		Log_print("SDL_Init FAILED: %s", SDL_GetError());
+		Log_println("SDL_Init FAILED: %s", SDL_GetError());
 		Log_flushlog();
 		return FALSE;
 	}
+	Log_println("SDL initialized");
 	atexit(SDL_Quit);
 	return TRUE;
 }

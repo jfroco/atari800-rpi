@@ -136,7 +136,7 @@ static void ModeInfo(void)
 {
 	char *fullstring = fullscreen ? "fullscreen" : "windowed";
 	char *vsyncstring = (SDL_VIDEO_screen->flags & SDL_DOUBLEBUF) ? "with vsync" : "without vsync";
-	Log_print("Video Mode: %dx%dx%d %s %s", SDL_VIDEO_screen->w, SDL_VIDEO_screen->h,
+	Log_println("Video Mode: %dx%dx%d %s %s", SDL_VIDEO_screen->w, SDL_VIDEO_screen->h,
 	          SDL_VIDEO_screen->format->BitsPerPixel, fullstring, vsyncstring);
 }
 
@@ -150,11 +150,11 @@ static void SetVideoMode(int w, int h, int bpp)
 	SDL_VIDEO_screen = SDL_SetVideoMode(w, h, bpp, flags);
 	if (SDL_VIDEO_screen == NULL) {
 		/* Some SDL_SetVideoMode errors can be averted by reinitialising the SDL video subsystem. */
-		Log_print("Setting video mode: %dx%dx%d failed: %s. Reinitialising video.", w, h, bpp, SDL_GetError());
+		Log_println("Setting video mode: %dx%dx%d failed: %s. Reinitialising video.", w, h, bpp, SDL_GetError());
 		SDL_VIDEO_ReinitSDL();
 		SDL_VIDEO_screen = SDL_SetVideoMode(w, h, bpp, flags);
 		if (SDL_VIDEO_screen == NULL) {
-			Log_print("Setting Video Mode: %dx%dx%d failed: %s", w, h, bpp, SDL_GetError());
+			Log_println("Setting Video Mode: %dx%dx%d failed: %s", w, h, bpp, SDL_GetError());
 			Log_flushlog();
 			exit(-1);
 		}
@@ -174,7 +174,7 @@ void SDL_VIDEO_SW_SetVideoMode(VIDEOMODE_resolution_t const *res, int windowed, 
 	if (SDL_VIDEO_SW_bpp == 0) {
 		/* Autodetect bpp */
 		if ((SDL_VIDEO_native_bpp != 8) && (SDL_VIDEO_native_bpp != 16) && (SDL_VIDEO_native_bpp != 32)) {
-			Log_print("Native BPP of %i not supported, setting 8bit mode (slow conversion)", SDL_VIDEO_native_bpp);
+			Log_println("Native BPP of %i not supported, setting 8bit mode (slow conversion)", SDL_VIDEO_native_bpp);
 			SDL_VIDEO_SW_bpp = 8;
 		} else
 			SDL_VIDEO_SW_bpp = SDL_VIDEO_native_bpp;
@@ -790,7 +790,7 @@ int SDL_VIDEO_SW_Initialise(int *argc, char *argv[])
 			if (i_a) {
 				SDL_VIDEO_SW_bpp = Util_sscandec(argv[++i]);
 				if (SDL_VIDEO_SW_bpp != 0 && SDL_VIDEO_SW_bpp != 8 && SDL_VIDEO_SW_bpp != 16 && SDL_VIDEO_SW_bpp != 32) {
-					Log_print("Invalid BPP value %s", argv[i]);
+					Log_println("Invalid BPP value %s", argv[i]);
 					return FALSE;
 				}
 			}
@@ -798,12 +798,12 @@ int SDL_VIDEO_SW_Initialise(int *argc, char *argv[])
 		}
 		else {
 			if (strcmp(argv[i], "-help") == 0)
-				Log_print("\t-bpp <num>        Host color depth (0 = autodetect)");
+				Log_println("\t-bpp <num>        Host color depth (0 = autodetect)");
 			argv[j++] = argv[i];
 		}
 
 		if (a_m) {
-			Log_print("Missing argument for '%s'", argv[i]);
+			Log_println("Missing argument for '%s'", argv[i]);
 			return FALSE;
 		}
 	}
