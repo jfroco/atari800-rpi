@@ -1,5 +1,8 @@
-This Version includes a mapping of SELECT and START keys to Joystick (XBox One Wireless) buttons.
-The logging has been enhanced. A log file location can be configured. An additional logging option in atari800.cfg can be used to find the right joystick button IDs to use.
+This Version includes an in-game mapping of SELECT and START keys to Joystick (XBox One Wireless) buttons.
+
+
+The logging has been enhanced. A log file location can be configured.
+An additional logging option in atari800.cfg can be used to find the right joystick button IDs to use.
 
 Configuration:
 Atari 800 Emulator, Version 3.1.0
